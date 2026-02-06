@@ -4,6 +4,30 @@ module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        fontFamily: {
+          "pretendard-regular": ["Pretendard"],
+          "pretendard-medium": ["Pretendard-Medium"],
+          "pretendard-semibold": ["Pretendard-SemiBold"],
+          "pretendard-bold": ["Pretendard-Bold"],
+        },
+      },
+      fontSize: {
+        // 12pt
+        12: ["12px", { lineHeight: "18px" }],
+
+        // 14pt
+        14: ["14px", { lineHeight: "21px" }],
+
+        // 16pt
+        16: ["16px", { lineHeight: "24px" }],
+
+        // 18pt
+        18: ["18px", { lineHeight: "27px" }],
+
+        // 24pt
+        24: ["24px", { lineHeight: "36px" }],
+      },
       colors: {
         primary: {
           100: "#FFCFC5",
