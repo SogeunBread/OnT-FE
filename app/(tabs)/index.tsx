@@ -1,10 +1,54 @@
+import Button from "@/components/button";
 import { ScrollView, Text, View } from "react-native";
 
 export default function TypographyTest() {
   return (
     <ScrollView className="flex-1 bg-white p-5">
-      {/* ===== Font Size & Weight Test ===== */}
+      {/* ===== Button Test ===== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        Button Test
+      </Text>
+
+      {/* 기본 상태 + 약한 스타일 */}
+      <View className="mb-6 space-y-2">
+        <Text className="text-14 font-pretendard-semibold">
+          Default State + Weak Style
+        </Text>
+        <Button text="버튼" state="default" style="weak" />
+      </View>
+
+      {/* 기본 상태 + 채운 스타일 */}
+      <View className="mb-6 space-y-2">
+        <Text className="text-14 font-pretendard-semibold">
+          Default State + Fill Style
+        </Text>
+        <Button text="버튼" state="default" style="fill" />
+      </View>
+
+      {/* 클릭 상태 + 약한 스타일 */}
+      <View className="mb-6 space-y-2">
+        <Text className="text-14 font-pretendard-semibold">
+          Click State + Weak Style
+        </Text>
+        <Button text="버튼" state="click" style="weak" />
+      </View>
+
+      {/* 클릭 상태 + 채운 스타일 */}
+      <View className="mb-6 space-y-2">
+        <Text className="text-14 font-pretendard-semibold">
+          Click State + Fill Style
+        </Text>
+        <Button text="버튼" state="click" style="fill" />
+      </View>
+
+      {/* 비활성화 상태 */}
+      <View className="mb-6 space-y-2">
+        <Text className="text-14 font-pretendard-semibold">Disabled State</Text>
+        <Button text="버튼" state="disabled" />
+      </View>
+
+      {/* ===== Font Size & Weight Test ===== */}
+      <Text className="mb-4 mt-10 text-18 font-pretendard-bold text-primary-main">
         Typography Test
       </Text>
 
@@ -60,6 +104,7 @@ export default function TypographyTest() {
 
         {/* Primary */}
         <View className="flex-row flex-wrap gap-3">
+          <ColorBox color="bg-primary-50" label="primary-50" />
           <ColorBox color="bg-primary-100" label="primary-100" />
           <ColorBox color="bg-primary-200" label="primary-200" />
           <ColorBox color="bg-primary-300" label="primary-300" />
