@@ -62,24 +62,15 @@ const Button = ({
     <Pressable
       {...props}
       disabled={disabled || state === "disabled"}
+      className="px-5 py-2.5 rounded-lg items-center justify-center"
       style={{
-        // 버튼의 기본 스타일
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        // 동적 스타일
         backgroundColor: backgroundColor,
         opacity: disabled || state === "disabled" ? 0.6 : 1,
       }}
     >
       <Text
+        className="text-16 font-pretendard-semibold"
         style={{
-          // 텍스트 기본 스타일
-          fontSize: 16,
-          lineHeight: 24,
-          // 동적 텍스트 스타일
           fontWeight: fontWeight,
           color: textColor,
         }}
