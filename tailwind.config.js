@@ -33,12 +33,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        fontFamily: {
-          "pretendard-regular": ["Pretendard"],
-          "pretendard-medium": ["Pretendard-Medium"],
-          "pretendard-semibold": ["Pretendard-SemiBold"],
-          "pretendard-bold": ["Pretendard-Bold"],
-        },
+        "pretendard-regular": ["Pretendard"],
+        "pretendard-medium": ["Pretendard-Medium"],
+        "pretendard-semibold": ["Pretendard-SemiBold"],
+        "pretendard-bold": ["Pretendard-Bold"],
       },
       fontSize: {
         // 12pt
