@@ -1,6 +1,7 @@
+import AreaCheck from "@/components/area_check";
 import Chip from "@/components/chip/Chip";
-import React, { useMemo, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { useMemo, useState } from "react";
+import { ScrollView, Text, View } from "react-native";
 
 export default function TabTwoScreen() {
   const regions = useMemo(
@@ -37,7 +38,7 @@ export default function TabTwoScreen() {
   return (
     <ScrollView className="flex-1 bg-white px-4 py-6">
       <Text className="mb-4 text-18 font-pretendard-bold">
-        Chip Test (Parent Managed)
+        Chip (Parent Managed), Checkbox, AreaCheck Test
       </Text>
 
       <Text className="mb-2 text-14 font-pretendard-semibold">
@@ -61,29 +62,12 @@ export default function TabTwoScreen() {
           const isSelected = selectedRegionIds.includes(region.id);
 
           return (
-            <Pressable
+            <AreaCheck
               key={region.id}
               onPress={() => toggleRegion(region.id)}
-              className={`flex-row items-center justify-between rounded-lg px-4 py-3 ${
-                isSelected ? "bg-primary-50" : "bg-gray-100"
-              }`}
-            >
-              <Text
-                className={`text-14 font-pretendard-medium ${
-                  isSelected ? "text-primary-main" : "text-text"
-                }`}
-              >
-                {region.name}
-              </Text>
-
-              <Text
-                className={`text-12 font-pretendard-semibold ${
-                  isSelected ? "text-primary-main" : "text-text-sub2"
-                }`}
-              >
-                {isSelected ? "선택됨" : "선택"}
-              </Text>
-            </Pressable>
+              checked={isSelected}
+              label={region.name}
+            />
           );
         })}
       </View>
