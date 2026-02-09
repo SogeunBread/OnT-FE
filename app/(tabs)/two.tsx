@@ -1,31 +1,92 @@
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import Chip from "@/components/chip/Chip";
+import React, { useMemo, useState } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 export default function TabTwoScreen() {
+  const regions = useMemo(
+    () => [
+      { id: "paju-simsandong", name: "경기 파주시 심산동" },
+      { id: "paju-jangdanmyeon", name: "경기 파주시 장단면" },
+      { id: "paju-beopwon", name: "경기 파주시 법원면" },
+      { id: "paju-joryeong", name: "경기 파주시 조리읍" },
+      { id: "paju-geumchon", name: "경기 파주시 금촌동" },
+    ],
+    [],
+  );
+
+  const [selectedRegionIds, setSelectedRegionIds] = useState([
+    "paju-simsandong",
+    "paju-geumchon",
+  ]);
+
+  const selectedRegions = useMemo(
+    () => regions.filter((r) => selectedRegionIds.includes(r.id)),
+    [regions, selectedRegionIds],
+  );
+
+  const toggleRegion = (id) => {
+    setSelectedRegionIds((prev) =>
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id],
+    );
+  };
+
+  const removeRegion = (id) => {
+    setSelectedRegionIds((prev) => prev.filter((v) => v !== id));
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
-    </View>
+    <ScrollView className="flex-1 bg-white px-4 py-6">
+      <Text className="mb-4 text-18 font-pretendard-bold">
+        Chip Test (Parent Managed)
+      </Text>
+
+      <Text className="mb-2 text-14 font-pretendard-semibold">
+        선택한 지역 {selectedRegionIds.length}개
+      </Text>
+
+      {/* Selected Chips */}
+      <View className="mb-6 flex-row flex-wrap gap-3">
+        {selectedRegions.map((region) => (
+          <Chip
+            key={region.id}
+            text={region.name}
+            onClose={() => removeRegion(region.id)}
+          />
+        ))}
+      </View>
+
+      {/* Region selector */}
+      <View className="space-y-2">
+        {regions.map((region) => {
+          const isSelected = selectedRegionIds.includes(region.id);
+
+          return (
+            <Pressable
+              key={region.id}
+              onPress={() => toggleRegion(region.id)}
+              className={`flex-row items-center justify-between rounded-lg px-4 py-3 ${
+                isSelected ? "bg-primary-50" : "bg-gray-100"
+              }`}
+            >
+              <Text
+                className={`text-14 font-pretendard-medium ${
+                  isSelected ? "text-primary-main" : "text-text"
+                }`}
+              >
+                {region.name}
+              </Text>
+
+              <Text
+                className={`text-12 font-pretendard-semibold ${
+                  isSelected ? "text-primary-main" : "text-text-sub2"
+                }`}
+              >
+                {isSelected ? "선택됨" : "선택"}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
