@@ -11,7 +11,7 @@ const Chip = ({
   className = "",
   textClassName = "",
   closeClassName = "",
-  ...props
+  ...restProps
 }) => {
   const handleClose = (e) => {
     e?.stopPropagation?.();
@@ -20,7 +20,7 @@ const Chip = ({
 
   return (
     <Pressable
-      {...props}
+      {...restProps}
       onPress={onPress}
       className={`self-start flex-row items-center gap-2 rounded-[20px] bg-primary-main px-2 py-1 ${disabled ? "opacity-60" : ""} ${className}`}
     >
