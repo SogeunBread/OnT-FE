@@ -1,5 +1,6 @@
 import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
+import Chip from "@/components/chip";
 import { ScrollView, Text, View } from "react-native";
 
 export default function TypographyTest() {
@@ -55,6 +56,16 @@ export default function TypographyTest() {
 
       <View className="mb-6 space-y-2">
         <ButtonTwo />
+      </View>
+
+      {/* ===== Chip Test ===== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        Chip Test
+      </Text>
+
+      <View className="mb-6 flex-row flex-wrap gap-3">
+        <Chip text="선택한 지역" />
+        <Chip text="서울시 강남구" />
       </View>
 
       {/* ===== Font Size & Weight Test ===== */}
