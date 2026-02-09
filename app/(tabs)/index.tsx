@@ -1,4 +1,5 @@
-import Button from "@/components/button";
+import Button from "@/components/button/Button";
+import ButtonTwo from "@/components/button/ButtonTwo";
 import { ScrollView, Text, View } from "react-native";
 
 export default function TypographyTest() {
@@ -45,6 +46,15 @@ export default function TypographyTest() {
       <View className="mb-6 space-y-2">
         <Text className="text-14 font-pretendard-semibold">Disabled State</Text>
         <Button text="버튼" state="disabled" />
+      </View>
+
+      {/* ===== ButtonTwo Test ===== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        ButtonTwo Test
+      </Text>
+
+      <View className="mb-6 space-y-2">
+        <ButtonTwo />
       </View>
 
       {/* ===== Font Size & Weight Test ===== */}
