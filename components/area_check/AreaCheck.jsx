@@ -1,4 +1,4 @@
-import Checkbox from "@/components/checkbox/Checkbox";
+import CheckSquare from "@/components/check/CheckSquare";
 import { Pressable, Text, View } from "react-native";
 
 const AreaCheck = ({
@@ -18,7 +18,7 @@ const AreaCheck = ({
       } ${className}`}
     >
       <View pointerEvents="none">
-        <Checkbox checked={checked} />
+        <CheckSquare checked={checked} />
       </View>
 
       <Text
