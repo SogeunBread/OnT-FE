@@ -1,11 +1,13 @@
 import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
 import Check from "@/components/check/Check";
+import Radio from "@/components/radio/Radio";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 export default function TypographyTest() {
   const [isChecked, setIsChecked] = useState(false);
+  const [selectedRadio, setSelectedRadio] = useState(0);
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
@@ -74,6 +76,29 @@ export default function TypographyTest() {
         />
         {/* ==== 보여주기용 ====*/}
         <Check checked={true} label="선택됨" />
+      </View>
+
+      {/* === Radio Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        Radio Test
+      </Text>
+
+      <View className="mb-6 space-y-2">
+        <Radio
+          checked={selectedRadio === 0}
+          onPress={() => setSelectedRadio(0)}
+          label="Option 1"
+        />
+        <Radio
+          checked={selectedRadio === 1}
+          onPress={() => setSelectedRadio(1)}
+          label="Option 2"
+        />
+        <Radio
+          checked={selectedRadio === 2}
+          onPress={() => setSelectedRadio(2)}
+          label="Option 3"
+        />
       </View>
 
       {/* ===== Font Size & Weight Test ===== */}
