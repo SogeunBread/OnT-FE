@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 // Design System Colors
+// main = 400
 const colors = {
   primary: {
     50: "#FFECE8",
@@ -15,8 +16,16 @@ const colors = {
     yellow: "#FFC74D",
   },
   grayscale: {
+    G900: "#292929",
+    G800: "#414141",
+    G700: "#595959",
+    G600: "#707070",
     G500: "#888888",
+    G400: "#A0A0A0",
+    G500: "#888888",
+    G300: "#B7B7B7",
     G200: "#CFCFCF",
+    G100: "#E7E7E7",
   },
   text: {
     DEFAULT: "#111111",
