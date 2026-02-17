@@ -1,6 +1,7 @@
 import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
 import Check from "@/components/check/Check";
+import Checkbox from "@/components/checkbox/Checkbox";
 import Heart from "@/components/heart/Heart";
 import Radio from "@/components/radio/Radio";
 import { useState } from "react";
@@ -10,9 +11,30 @@ export default function TypographyTest() {
   const [isChecked, setIsChecked] = useState(false);
   const [selectedRadio, setSelectedRadio] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [cardChecked, setCardChecked] = useState(false);
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== Checkbox Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        Checkbox Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        <Checkbox
+          title="메인 텍스트"
+          subtitle="서브 텍스트"
+          checked={cardChecked}
+          onChange={setCardChecked}
+        />
+
+        {/* 보여주기용 */}
+        <Checkbox
+          title="선택된 상태"
+          subtitle="선택된 상태의 서브 텍스트"
+          checked={true}
+        />
+      </View>
       {/* ==== Heart Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         Heart Test
