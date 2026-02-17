@@ -1,6 +1,7 @@
 import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
 import Check from "@/components/check/Check";
+import Heart from "@/components/heart/Heart";
 import Radio from "@/components/radio/Radio";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -8,9 +9,22 @@ import { ScrollView, Text, View } from "react-native";
 export default function TypographyTest() {
   const [isChecked, setIsChecked] = useState(false);
   const [selectedRadio, setSelectedRadio] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== Heart Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        Heart Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        <Heart liked={isLiked} onChange={setIsLiked} size={28} />
+
+        {/* 보여주기용 */}
+        <Heart liked={true} size={28} />
+      </View>
+
       {/* ===== Button Test ===== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         Button Test
