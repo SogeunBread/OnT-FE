@@ -2,6 +2,7 @@ import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
 import Check from "@/components/check/Check";
 import Checkbox from "@/components/checkbox/Checkbox";
+import ChipSquare from "@/components/chip/ChipSquare";
 import Heart from "@/components/heart/Heart";
 import Radio from "@/components/radio/Radio";
 import { useState } from "react";
@@ -12,9 +13,30 @@ export default function TypographyTest() {
   const [selectedRadio, setSelectedRadio] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [cardChecked, setCardChecked] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("male");
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== ChipSuqare Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        ChipSquare Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        <ChipSquare
+          value="male"
+          content="남자"
+          selected={selectedValue === "male"}
+          onChange={setSelectedValue}
+        />
+
+        <ChipSquare
+          value="female"
+          content="여자"
+          selected={selectedValue === "female"}
+          onChange={setSelectedValue}
+        />
+      </View>
       {/* ==== Checkbox Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         Checkbox Test
