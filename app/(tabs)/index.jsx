@@ -47,7 +47,7 @@ export default function TypographyTest() {
           checked={false}
         />
       </View>
-      {/* ==== ChipSuqare Test ==== */}
+      {/* ==== ChipSquare Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         ChipSquare Test
       </Text>
