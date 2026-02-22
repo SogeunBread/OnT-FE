@@ -2,6 +2,7 @@ import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
 import Check from "@/components/check/Check";
 import Checkbox from "@/components/checkbox/Checkbox";
+import CheckboxBig from "@/components/checkbox/CheckboxBig";
 import ChipSquare from "@/components/chip/ChipSquare";
 import Heart from "@/components/heart/Heart";
 import Radio from "@/components/radio/Radio";
@@ -14,9 +15,38 @@ export default function TypographyTest() {
   const [isLiked, setIsLiked] = useState(false);
   const [cardChecked, setCardChecked] = useState(false);
   const [selectedValue, setSelectedValue] = useState("male");
+  const [bigChecked, setBigChecked] = useState(false);
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== CheckboxBig Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        CheckboxBig Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        {/* 토글 테스트 */}
+        <CheckboxBig
+          title="메인 텍스트"
+          subtitle="서브 텍스트"
+          checked={bigChecked}
+          onChange={setBigChecked}
+        />
+
+        {/* 항상 선택 상태 */}
+        <CheckboxBig
+          title="선택된 상태"
+          subtitle="checked=true"
+          checked={true}
+        />
+
+        {/* 항상 미선택 상태 */}
+        <CheckboxBig
+          title="미선택 상태"
+          subtitle="checked=false"
+          checked={false}
+        />
+      </View>
       {/* ==== ChipSuqare Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         ChipSquare Test
