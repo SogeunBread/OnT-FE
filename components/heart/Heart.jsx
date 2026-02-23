@@ -1,4 +1,5 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import HeartFilled from "@/assets/icons/heart_filled.svg";
+import HeartOutline from "@/assets/icons/heart_outline.svg";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 
@@ -21,29 +22,25 @@ const Heart = ({
 
   const handleToggle = () => {
     const next = !isLiked;
-
-    if (!isControlled) {
-      setInternalLiked(next);
-    }
+    if (!isControlled) setInternalLiked(next);
     onChange?.(next);
   };
+
+  const Icon = isLiked ? HeartFilled : HeartOutline;
+  const iconColor = isLiked ? activeColor : inactiveColor;
 
   return (
     <Pressable
       {...restProps}
       onPress={handleToggle}
+      hitSlop={hitSlop}
       className={`self-start ${className}`}
       accessibilityRole="button"
       accessibilityLabel={isLiked ? "좋아요 취소" : "좋아요"}
       accessibilityState={{ selected: isLiked }}
-      hitSlop={hitSlop}
     >
       <View className={iconClassName}>
-        <Ionicons
-          name={isLiked ? "heart" : "heart-outline"}
-          size={size}
-          color={isLiked ? activeColor : inactiveColor}
-        />
+        <Icon width={size} height={size} color={iconColor} />
       </View>
     </Pressable>
   );
