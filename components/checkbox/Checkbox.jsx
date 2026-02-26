@@ -1,6 +1,6 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import Check from "../check/Check";
 
 const Checkbox = ({
   title = "메인 텍스트",
@@ -28,7 +28,6 @@ const Checkbox = ({
   };
 
   const cardTone = isChecked ? "bg-primary-50" : "bg-white";
-  const indicatorTone = isChecked ? "bg-primary-main" : "bg-grayscale-G400";
 
   return (
     <Pressable
@@ -57,10 +56,8 @@ const Checkbox = ({
       </View>
 
       {/* 우측 체크 원 */}
-      <View
-        className={`h-6 w-6 items-center justify-center rounded-[20px] ${indicatorTone} ${indicatorClassName}`}
-      >
-        <Ionicons name="checkmark" size={16} color="white" />
+      <View pointerEvents="none">
+        <Check checked={checked} />
       </View>
     </Pressable>
   );

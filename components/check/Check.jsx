@@ -1,4 +1,4 @@
-import Feather from "@expo/vector-icons/Feather";
+import CheckIcon from "@/components/icons/Check";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -40,10 +40,10 @@ const Check = ({
       accessibilityRole="checkbox"
     >
       <View
-        className={`h-5 w-5 items-center justify-center rounded-[20px] border ${boxTone} ${boxClassName}`}
+        className={`size-[24px] items-center justify-center rounded-[20px] border ${boxTone} ${boxClassName}`}
       >
-        <View className="relative h-3 w-3">
-          <Feather name="check" size={12} color="white" />
+        <View className="relative">
+          <CheckIcon size={16} color="white" />
         </View>
       </View>
 
