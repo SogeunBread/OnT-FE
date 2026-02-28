@@ -1,3 +1,5 @@
+import AreaChildBg from "@/components/area_child/AreaChildBg";
+import AreaChildCheck from "@/components/area_child/AreaChildCheck";
 import AreaParent from "@/components/area_parent/AreaParent";
 import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
@@ -18,9 +20,51 @@ export default function TypographyTest() {
   const [selectedValue, setSelectedValue] = useState("male");
   const [bigChecked, setBigChecked] = useState(false);
   const [areaSelected, setAreaSelected] = useState(false);
+  const [bgSelected, setBgSelected] = useState(false);
+  const [checkSelected, setCheckSelected] = useState(false);
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== AreaChildBg Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        AreaChildBg Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        {/* 토글 테스트 */}
+        <AreaChildBg
+          title="토글 테스트"
+          selected={bgSelected}
+          onChange={setBgSelected}
+        />
+
+        {/* 항상 선택 상태 */}
+        <AreaChildBg title="항상 선택" selected={true} />
+
+        {/* 항상 미선택 상태 */}
+        <AreaChildBg title="항상 미선택" selected={false} />
+      </View>
+
+      {/* ==== AreaChildCheck Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        AreaChildCheck Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        {/* 토글 테스트 */}
+        <AreaChildCheck
+          title="토글 테스트"
+          checked={checkSelected}
+          onChange={setCheckSelected}
+        />
+
+        {/* 항상 체크 상태 */}
+        <AreaChildCheck title="항상 체크" checked={true} />
+
+        {/* 항상 미체크 상태 */}
+        <AreaChildCheck title="항상 미체크" checked={false} />
+      </View>
+
       {/* ==== AreaParent Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         AreaParent Test
@@ -46,7 +90,7 @@ export default function TypographyTest() {
           selected={false}
         />
       </View>
-      
+
       {/* ==== CheckboxBig Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         CheckboxBig Test
