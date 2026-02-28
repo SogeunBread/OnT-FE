@@ -1,3 +1,4 @@
+import AreaParent from "@/components/area_parent/AreaParent";
 import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
 import Check from "@/components/check/Check";
@@ -16,9 +17,36 @@ export default function TypographyTest() {
   const [cardChecked, setCardChecked] = useState(false);
   const [selectedValue, setSelectedValue] = useState("male");
   const [bigChecked, setBigChecked] = useState(false);
+  const [areaSelected, setAreaSelected] = useState(false);
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== AreaParent Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        AreaParent Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        {/* 토글 테스트 */}
+        <AreaParent
+          title="title"
+          selected={areaSelected}
+          onChange={setAreaSelected}
+        />
+
+        {/* 항상 선택 상태 */}
+        <AreaParent
+          title="선택"
+          selected={true}
+        />
+
+        {/* 항상 미선택 상태 */}
+        <AreaParent
+          title="미선택"
+          selected={false}
+        />
+      </View>
+      
       {/* ==== CheckboxBig Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         CheckboxBig Test
