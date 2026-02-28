@@ -1,6 +1,6 @@
+import CheckIcon from "@/assets/icons/check.svg";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import Check from "../check/Check";
 
 const Checkbox = ({
   title = "메인 텍스트",
@@ -22,12 +22,16 @@ const Checkbox = ({
 
   const handleToggle = () => {
     const next = !isChecked;
-
-    if (!isControlled) setInternalChecked(next);
+    if (!isControlled) {
+      setInternalChecked(next);
+    }
     onChange?.(next);
   };
 
   const cardTone = isChecked ? "bg-primary-50" : "bg-white";
+  const indicatorTone = isChecked
+    ? "bg-primary-main"
+    : "bg-grayscale-G200";
 
   return (
     <Pressable
@@ -56,8 +60,10 @@ const Checkbox = ({
       </View>
 
       {/* 우측 체크 원 */}
-      <View pointerEvents="none">
-        <Check checked={checked} />
+      <View
+        className={`h-6 w-6 items-center justify-center rounded-[20px] ${indicatorTone} ${indicatorClassName}`}
+      >
+        <CheckIcon width={16} height={16} color="#FFFFFF" />
       </View>
     </Pressable>
   );
