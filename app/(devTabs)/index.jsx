@@ -9,6 +9,7 @@ import CheckboxBig from "@/components/checkbox/CheckboxBig";
 import ChipSquare from "@/components/chip/ChipSquare";
 import Heart from "@/components/heart/Heart";
 import Radio from "@/components/radio/Radio";
+import RadioBig from "@/components/radio/RadioBig";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -22,9 +23,39 @@ export default function TypographyTest() {
   const [areaSelected, setAreaSelected] = useState(false);
   const [bgSelected, setBgSelected] = useState(false);
   const [checkSelected, setCheckSelected] = useState(false);
+  const [bigRadio, setBigRadio] = useState(false);
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== RadioBig Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        RadioBig Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        {/* 토글 테스트 */}
+        <RadioBig
+          title="메인 텍스트"
+          subtitle="서브 텍스트"
+          checked={bigRadio}
+          onChange={setBigRadio}
+        />
+
+        {/* 항상 선택 */}
+        <RadioBig title="선택된 상태" subtitle="선택" checked={true} />
+
+        {/* 항상 미선택 */}
+        <RadioBig title="미선택 상태" subtitle="미선택" checked={false} />
+
+        {/* disabled 테스트 */}
+        <RadioBig
+          title="비활성화"
+          subtitle="비활성화 상태도 일단 구현은 해둠"
+          checked={false}
+          disabled
+        />
+      </View>
+
       {/* ==== AreaChildBg Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         AreaChildBg Test

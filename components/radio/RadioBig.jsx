@@ -55,7 +55,7 @@ const RadioBig = ({
         </Text>
       </View>
 
-      {/* 우측 라디오 */}
+      {/* 우측 라디오 버튼 */}
       <View pointerEvents="none">
         <Radio
           checked={isChecked}
