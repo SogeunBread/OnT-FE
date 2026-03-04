@@ -22,15 +22,7 @@ const Radio = ({
     return checked ? colors.primary.main : colors.grayscale.G400;
   };
 
-  const getBackgroundColor = () => {
-    if (disabled) {
-      return colors.grayscale.G200;
-    }
-    return checked ? colors.primary.main : "transparent";
-  };
-
   const borderColor = getBorderColor();
-  const backgroundColor = getBackgroundColor();
 
   return (
     <Pressable
@@ -41,10 +33,10 @@ const Radio = ({
     >
       <View
         className={`w-6 h-6 rounded-full items-center justify-center ${
-          !checked ? "border" : ""
+          !checked ? "border" : "border-8"
         }`}
         style={{
-          backgroundColor: backgroundColor,
+          backgroundColor: disabled ? colors.grayscale.G200 : "",
           borderColor: borderColor,
           opacity: disabled ? 0.6 : 1,
         }}
@@ -53,7 +45,7 @@ const Radio = ({
           <View
             className="w-2 h-2 rounded-full"
             style={{
-              backgroundColor: colors.text.inverse,
+              backgroundColor: "transparent",
             }}
           />
         )}
