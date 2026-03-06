@@ -2,6 +2,7 @@ import AreaChildBg from "@/components/area_child/AreaChildBg";
 import AreaChildCheck from "@/components/area_child/AreaChildCheck";
 import AreaParent from "@/components/area_parent/AreaParent";
 import Button from "@/components/button/Button";
+import ButtonSmall from "@/components/button/ButtonSmall";
 import ButtonTwo from "@/components/button/ButtonTwo";
 import Check from "@/components/check/Check";
 import CheckSquare from "@/components/check/CheckSquare";
@@ -30,6 +31,15 @@ export default function TypographyTest() {
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== ButtonSmall Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        ButtonSmall Test
+      </Text>
+      <View className="mb-6 gap-3">
+        <ButtonSmall text="버튼" />
+        <ButtonSmall text="버튼" disabled />
+      </View>
+
       {/* ==== Tag Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         Tag Test
