@@ -4,6 +4,7 @@ import AreaParent from "@/components/area_parent/AreaParent";
 import Button from "@/components/button/Button";
 import ButtonTwo from "@/components/button/ButtonTwo";
 import Check from "@/components/check/Check";
+import CheckSquare from "@/components/check/CheckSquare";
 import Checkbox from "@/components/checkbox/Checkbox";
 import CheckboxBig from "@/components/checkbox/CheckboxBig";
 import ChipSquare from "@/components/chip/ChipSquare";
@@ -15,6 +16,7 @@ import { ScrollView, Text, View } from "react-native";
 
 export default function TypographyTest() {
   const [isChecked, setIsChecked] = useState(false);
+  const [squareChecked, setSquareChecked] = useState(false);
   const [selectedRadio, setSelectedRadio] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [cardChecked, setCardChecked] = useState(false);
@@ -277,6 +279,32 @@ export default function TypographyTest() {
         />
         {/* ==== 보여주기용 ====*/}
         <Check checked={true} label="선택됨" />
+      </View>
+
+      {/* ==== CheckSquare Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        CheckSquare Test
+      </Text>
+
+      <View className="mb-6 gap-3">
+        {/* 토글 테스트 */}
+        <CheckSquare
+          checked={squareChecked}
+          onChange={setSquareChecked}
+          label={squareChecked ? "선택됨" : "미선택"}
+        />
+
+        {/* 항상 선택 상태 */}
+        <CheckSquare checked={true} label="선택된 상태" />
+
+        {/* 항상 미선택 상태 */}
+        <CheckSquare checked={false} label="미선택 상태" />
+
+        {/* 비활성화 - 미선택 */}
+        <CheckSquare checked={false} disabled label="비활성화 상태" />
+
+        {/* 비활성화 - 선택 */}
+        <CheckSquare checked={true} disabled label="비활성화 + 선택" />
       </View>
 
       {/* === Radio Test ==== */}
