@@ -11,6 +11,7 @@ import ChipSquare from "@/components/chip/ChipSquare";
 import Heart from "@/components/heart/Heart";
 import Radio from "@/components/radio/Radio";
 import RadioBig from "@/components/radio/RadioBig";
+import Tag from "@/components/tag/Tag";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -29,6 +30,15 @@ export default function TypographyTest() {
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
+      {/* ==== Tag Test ==== */}
+      <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+        Tag Test
+      </Text>
+      <View className="flex-row mb-6 gap-3">
+        <Tag text="#근력증가" />
+        <Tag text="#재활" />
+      </View>
+
       {/* ==== RadioBig Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         RadioBig Test
