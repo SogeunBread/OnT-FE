@@ -110,16 +110,10 @@ export default function TypographyTest() {
         />
 
         {/* 항상 선택 상태 */}
-        <AreaParent
-          title="선택"
-          selected={true}
-        />
+        <AreaParent title="선택" selected={true} />
 
         {/* 항상 미선택 상태 */}
-        <AreaParent
-          title="미선택"
-          selected={false}
-        />
+        <AreaParent title="미선택" selected={false} />
       </View>
 
       {/* ==== CheckboxBig Test ==== */}
@@ -212,15 +206,7 @@ export default function TypographyTest() {
         <Text className="text-14 font-pretendard-semibold">
           Default State + Weak Style
         </Text>
-        <Button text="버튼" state="default" style="weak" />
-      </View>
-
-      {/* 기본 상태 + 채운 스타일 */}
-      <View className="mb-6 space-y-2">
-        <Text className="text-14 font-pretendard-semibold">
-          Default State + Fill Style
-        </Text>
-        <Button text="버튼" state="default" style="fill" />
+        <Button text="버튼" state="default" variant="weak" />
       </View>
 
       {/* 클릭 상태 + 약한 스타일 */}
@@ -228,7 +214,15 @@ export default function TypographyTest() {
         <Text className="text-14 font-pretendard-semibold">
           Click State + Weak Style
         </Text>
-        <Button text="버튼" state="click" style="weak" />
+        <Button text="버튼" state="click" variant="weak" />
+      </View>
+
+      {/* 기본 상태 + 채운 스타일 */}
+      <View className="mb-6 space-y-2">
+        <Text className="text-14 font-pretendard-semibold">
+          Default State + Fill Style
+        </Text>
+        <Button text="버튼" state="default" variant="fill" />
       </View>
 
       {/* 클릭 상태 + 채운 스타일 */}
@@ -236,13 +230,29 @@ export default function TypographyTest() {
         <Text className="text-14 font-pretendard-semibold">
           Click State + Fill Style
         </Text>
-        <Button text="버튼" state="click" style="fill" />
+        <Button text="버튼" state="click" variant="fill" />
       </View>
 
       {/* 비활성화 상태 */}
       <View className="mb-6 space-y-2">
         <Text className="text-14 font-pretendard-semibold">Disabled State</Text>
-        <Button text="버튼" state="disabled" />
+        <Button text="버튼" state="disabled" variant="disabled" />
+      </View>
+
+      {/* 클릭 상태 + 회색 스타일 */}
+      <View className="mb-6 space-y-2">
+        <Text className="text-14 font-pretendard-semibold">
+          Click State + Weak-Dark Style
+        </Text>
+        <Button text="버튼" state="click" variant="weakDark" />
+      </View>
+
+      {/* 기본 상태 + 클릭 상태 */}
+      <View className="mb-6 space-y-2">
+        <Text className="text-14 font-pretendard-semibold">
+          Default State + Weak-Dark Style
+        </Text>
+        <Button text="버튼" state="default" variant="weakDark" />
       </View>
 
       {/* ===== ButtonTwo Test ===== */}
