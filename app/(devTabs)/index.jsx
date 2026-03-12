@@ -10,11 +10,12 @@ import Checkbox from "@/components/checkbox/Checkbox";
 import CheckboxBig from "@/components/checkbox/CheckboxBig";
 import ChipSquare from "@/components/chip/ChipSquare";
 import Heart from "@/components/heart/Heart";
+import DesignModal from "@/components/modal";
 import Radio from "@/components/radio/Radio";
 import RadioBig from "@/components/radio/RadioBig";
 import Tag from "@/components/tag/Tag";
 import { useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Modal as RNModal, Pressable, ScrollView, Text, View } from "react-native";
 
 export default function TypographyTest() {
   const [isChecked, setIsChecked] = useState(false);
@@ -28,9 +29,23 @@ export default function TypographyTest() {
   const [bgSelected, setBgSelected] = useState(false);
   const [checkSelected, setCheckSelected] = useState(false);
   const [bigRadio, setBigRadio] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <ScrollView className="flex-1 bg-white p-5">
+    <View className="flex-1 bg-white">
+      <ScrollView className="flex-1 p-5">
+        {/* ==== Modal Test ==== */}
+        <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+          Modal Test
+        </Text>
+        <View className="mb-6">
+          <Button
+            text="모달 열기"
+            variant="fill"
+            onPress={() => setIsModalOpen(true)}
+          />
+        </View>
+
       {/* ==== ButtonSmall Test ==== */}
       <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
         ButtonSmall Test
@@ -432,7 +447,31 @@ export default function TypographyTest() {
           </View>
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+
+      <RNModal
+        visible={isModalOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsModalOpen(false)}
+      >
+        <Pressable
+          className="flex-1 bg-black/40 items-center justify-center px-4"
+          onPress={() => setIsModalOpen(false)}
+        >
+          <Pressable onPress={(event) => event.stopPropagation()}>
+            <DesignModal
+              title="타이틀"
+              content="본문 내용"
+              leftButtonText="취소"
+              rightButtonText="확인"
+              onLeftPress={() => setIsModalOpen(false)}
+              onRightPress={() => setIsModalOpen(false)}
+            />
+          </Pressable>
+        </Pressable>
+      </RNModal>
+    </View>
   );
 }
 
