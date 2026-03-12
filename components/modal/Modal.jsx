@@ -3,8 +3,8 @@ import { Text, View } from "react-native";
 import Button from "@/components/button";
 
 const Modal = ({
-  title = "",
-  content = "",
+  title,
+  content,
   showTitle = undefined,
   showContent = undefined,
   leftButtonText = "button",
@@ -12,8 +12,8 @@ const Modal = ({
   onLeftPress = () => {},
   onRightPress = () => {},
 }) => {
-  const hasTitle = Boolean(title?.trim?.());
-  const hasContent = Boolean(content?.trim?.());
+  const hasTitle = typeof title === "string" && title.trim().length > 0;
+  const hasContent = typeof content === "string" && content.trim().length > 0;
   const shouldShowTitle = showTitle ?? hasTitle;
   const shouldShowContent = showContent ?? hasContent;
 
