@@ -1,4 +1,5 @@
 // app/(devTabs)/_layout.tsx
+import HeaderMain from "@/components/header_main";
 import NavigationBar from "@/components/navigation/NavigationBar";
 import { Tabs } from "expo-router";
 
@@ -15,7 +16,20 @@ export default function DevTabsLayout() {
   return (
     <Tabs
       tabBar={(props) => <NavigationBar {...props} tabs={devTabs} />}
-      screenOptions={{ headerShown: false, tabBarShowLabel: false }}
+      screenOptions={{
+        headerShown: true,
+        header: ({ route }) => {
+          const currentTab = devTabs.find((tab) => tab.name === route.name);
+
+          return (
+            <HeaderMain
+              isHome={route.name === "home"}
+              menuName={currentTab?.label ?? "메뉴"}
+            />
+          );
+        },
+        tabBarShowLabel: false,
+      }}
     >
       {devTabs.map(({ name }) => (
         <Tabs.Screen key={name} name={name} />

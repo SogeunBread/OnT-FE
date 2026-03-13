@@ -1,3 +1,4 @@
+import HeaderMain from "@/components/header_main";
 import NavigationBar from "@/components/navigation/NavigationBar";
 import { userTabs } from "@/constants/userTabs";
 import { Tabs } from "expo-router";
@@ -7,7 +8,17 @@ export default function UserTabsLayout() {
     <Tabs
       tabBar={(props) => <NavigationBar {...props} tabs={userTabs} />}
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        header: ({ route }) => {
+          const currentTab = userTabs.find((tab) => tab.name === route.name);
+
+          return (
+            <HeaderMain
+              isHome={route.name === "home"}
+              menuName={currentTab?.label ?? "메뉴"}
+            />
+          );
+        },
         tabBarShowLabel: false,
       }}
     >
