@@ -9,6 +9,7 @@ import CheckSquare from "@/components/check/CheckSquare";
 import Checkbox from "@/components/checkbox/Checkbox";
 import CheckboxBig from "@/components/checkbox/CheckboxBig";
 import ChipSquare from "@/components/chip/ChipSquare";
+import FieldLong from "@/components/field-long/FieldLong";
 import Heart from "@/components/heart/Heart";
 import DesignModal from "@/components/modal";
 import Radio from "@/components/radio/Radio";
@@ -37,10 +38,30 @@ export default function TypographyTest() {
   const [bigRadio, setBigRadio] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMealTitle, setSelectedMealTitle] = useState("");
+  const [fieldValue, setFieldValue] = useState("content");
 
   return (
     <View className="flex-1 bg-white">
       <ScrollView className="flex-1 p-5">
+        {/* ==== FieldLong Test ==== */}
+        <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+          FieldLong Test
+        </Text>
+
+        <View className="mb-6 gap-4">
+          {/* 기본 상태 (placeholder) */}
+          <FieldLong placeholder="content" />
+
+          {/* 입력된 상태 */}
+          <FieldLong defaultValue="content" />
+
+          {/* controlled 테스트 */}
+          <FieldLong
+            value={fieldValue}
+            onChangeText={setFieldValue}
+            placeholder="content"
+          />
+        </View>
         {/* ==== Modal Test ==== */}
         <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
           Modal Test
