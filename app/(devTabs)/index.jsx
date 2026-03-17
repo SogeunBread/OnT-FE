@@ -15,6 +15,7 @@ import DesignModal from "@/components/modal";
 import Radio from "@/components/radio/Radio";
 import RadioBig from "@/components/radio/RadioBig";
 import Tag from "@/components/tag/Tag";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Pressable,
@@ -25,6 +26,7 @@ import {
 } from "react-native";
 
 export default function TypographyTest() {
+  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
   const [squareChecked, setSquareChecked] = useState(false);
   const [selectedRadio, setSelectedRadio] = useState(0);
@@ -43,6 +45,55 @@ export default function TypographyTest() {
   return (
     <View className="flex-1 bg-white">
       <ScrollView className="flex-1 p-5">
+        {/* ==== HeaderDetail Route Test ==== */}
+        <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+          HeaderDetail Route Test
+        </Text>
+
+        <View className="mb-6 gap-3">
+          <Button
+            text="찜 헤더 탭 열기"
+            onPress={() =>
+              router.push({
+                pathname: "/(devTabs)/header-detail-demo",
+                params: {
+                  title: "찜 헤더 탭",
+                  subtitle: "하트 액션 예시",
+                  actionType: "heart",
+                },
+              })
+            }
+          />
+          <Button
+            text="비교 헤더 탭 열기"
+            variant="weakDark"
+            onPress={() =>
+              router.push({
+                pathname: "/(devTabs)/header-detail-demo",
+                params: {
+                  title: "비교 헤더 탭",
+                  subtitle: "비교함 담기 예시",
+                  actionType: "compare",
+                },
+              })
+            }
+          />
+          <Button
+            text="액션 없는 헤더 탭 열기"
+            variant="weak"
+            onPress={() =>
+              router.push({
+                pathname: "/(devTabs)/header-detail-demo",
+                params: {
+                  title: "액션 없는 헤더 탭",
+                  subtitle: "우측 액션 없음",
+                  actionType: "none",
+                },
+              })
+            }
+          />
+        </View>
+
         {/* ==== FieldLong Test ==== */}
         <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
           FieldLong Test

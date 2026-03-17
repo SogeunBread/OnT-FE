@@ -1,4 +1,5 @@
 // app/(devTabs)/_layout.tsx
+import HeaderDetail from "@/components/header_detail";
 import HeaderMain from "@/components/header_main";
 import NavigationBar from "@/components/navigation/NavigationBar";
 import { Tabs } from "expo-router";
@@ -19,6 +20,16 @@ export default function DevTabsLayout() {
       screenOptions={{
         headerShown: true,
         header: ({ route }) => {
+          if (route.name === "header-detail-demo") {
+            return (
+              <HeaderDetail
+                title={route.params?.title ?? "Header Detail"}
+                subtitle={route.params?.subtitle ?? ""}
+                actionType={route.params?.actionType ?? "heart"}
+              />
+            );
+          }
+
           const currentTab = devTabs.find((tab) => tab.name === route.name);
 
           return (
@@ -34,6 +45,7 @@ export default function DevTabsLayout() {
       {devTabs.map(({ name }) => (
         <Tabs.Screen key={name} name={name} />
       ))}
+      <Tabs.Screen name="header-detail-demo" options={{ href: null }} />
     </Tabs>
   );
 }
