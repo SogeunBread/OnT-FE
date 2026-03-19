@@ -10,6 +10,8 @@ import Checkbox from "@/components/checkbox/Checkbox";
 import CheckboxBig from "@/components/checkbox/CheckboxBig";
 import ChipSquare from "@/components/chip/ChipSquare";
 import FieldLong from "@/components/field-long/FieldLong";
+import Field from "@/components/field/Field";
+import FieldSearch from "@/components/field/FieldSearch";
 import Heart from "@/components/heart/Heart";
 import DesignModal from "@/components/modal";
 import Radio from "@/components/radio/Radio";
@@ -41,10 +43,49 @@ export default function TypographyTest() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMealTitle, setSelectedMealTitle] = useState("");
   const [fieldValue, setFieldValue] = useState("content");
+  const [searchValue, setSearchValue] = useState("content");
+  const [fieldText, setFieldText] = useState("content");
 
   return (
     <View className="flex-1 bg-white">
       <ScrollView className="flex-1 p-5">
+        {/* ==== Field Test ==== */}
+        <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+          Field Test
+        </Text>
+
+        <View className="mb-6 gap-4">
+          {/* default */}
+          <Field placeholder="content" />
+
+          {/* filled */}
+          <Field defaultValue="content" />
+
+          {/* controlled */}
+          <Field
+            value={fieldText}
+            onChangeText={setFieldText}
+            placeholder="content"
+          />
+        </View>
+        {/* ==== FieldSearch Test ==== */}
+        <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
+          FieldSearch Test
+        </Text>
+
+        <View className="mb-6 gap-4">
+          {/* default */}
+          <FieldSearch placeholder="content" />
+
+          {/* filled */}
+          <FieldSearch defaultValue="content" />
+
+          {/* controlled */}
+          <FieldSearch
+            value={searchValue}
+            onChangeText={setSearchValue}
+          />
+        </View>
         {/* ==== HeaderDetail Route Test ==== */}
         <Text className="mb-4 text-18 font-pretendard-bold text-primary-main">
           HeaderDetail Route Test
