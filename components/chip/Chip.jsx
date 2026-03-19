@@ -1,43 +1,32 @@
-import { colors } from "@/tailwind.config";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import React from "react";
 import { Pressable, Text } from "react-native";
 
 const Chip = ({
-  text = "선택한 지역",
-  onClose,
-  onPress,
+  text = "text",
+  selected = true,
   disabled = false,
+  onPress,
   className = "",
   textClassName = "",
-  closeClassName = "",
-  ...restProps
+  ...props
 }) => {
-  const handleClose = (e) => {
-    e?.stopPropagation?.();
-    onClose?.(e);
-  };
+  const containerTone = selected ? "bg-primary-main" : "bg-grayscale-G100";
+  const textTone = selected ? "text-text-inverse" : "text-grayscale-G600";
+  const textWeight = selected
+    ? "font-pretendard-semibold"
+    : "font-pretendard-regular";
 
   return (
     <Pressable
-      {...restProps}
+      {...props}
+      accessibilityRole="button"
+      disabled={disabled}
       onPress={onPress}
-      className={`self-start flex-row items-center gap-2 rounded-[20px] bg-primary-main px-2 py-1 ${disabled ? "opacity-60" : ""} ${className}`}
+      className={`self-start items-center rounded-[20px] px-4 py-1.5 ${containerTone} ${disabled ? "opacity-60" : ""} ${className}`}
     >
-      <Text
-        className={`text-xs font-pretendard-semibold leading-4 text-white ${textClassName}`}
-      >
+      <Text className={`text-14 leading-[21px] ${textTone} ${textWeight} ${textClassName}`}>
         {text}
       </Text>
-
-      <Pressable
-        disabled={disabled}
-        onPress={handleClose}
-        hitSlop={10}
-        className={`h-3 w-3 items-center justify-center rounded-[20px] bg-white p-0.5 ${closeClassName}`}
-      >
-        <AntDesign name="close" size={8} color={colors.primary.main} />
-      </Pressable>
     </Pressable>
   );
 };
