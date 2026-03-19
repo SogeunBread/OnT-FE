@@ -1,3 +1,4 @@
+import { colors } from "@/tailwind.config";
 import { useState } from "react";
 import { Platform, TextInput, View } from "react-native";
 
@@ -9,6 +10,7 @@ const FieldLong = ({
   className = "",
   inputClassName = "",
   disabled = false,
+  maxLength,
   ...restProps
 }) => {
   const isControlled = typeof value === "string";
@@ -19,16 +21,11 @@ const FieldLong = ({
   const hasValue = inputValue.length > 0;
 
   const handleChangeText = (text) => {
-    if (!isControlled) {
-      setInternalValue(text);
-    }
+    if (!isControlled) setInternalValue(text);
     onChangeText?.(text);
   };
 
-  const borderTone = isFocused
-    ? "border-primary-main"
-    : "border-grayscale-G300";
-
+  const borderTone = isFocused ? "border-primary-main" : "border-grayscale-G300";
   const textTone = isFocused || hasValue ? "text-text" : "text-grayscale-G500";
 
   return (
@@ -45,7 +42,8 @@ const FieldLong = ({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
-        placeholderTextColor="#888888"
+        placeholderTextColor={colors.grayscale.G500}
+        maxLength={maxLength}
         className={`flex-1 text-14 font-pretendard-regular leading-5 ${textTone} ${inputClassName}`}
         style={{
           padding: 0,
