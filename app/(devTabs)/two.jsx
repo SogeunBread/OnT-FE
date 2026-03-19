@@ -1,5 +1,6 @@
 import AreaCheck from "@/components/area_check";
 import Chip from "@/components/chip/Chip";
+import ChipArea from "@/components/chip/ChipArea";
 import { useMemo, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -19,6 +20,7 @@ export default function TabTwoScreen() {
     "paju-simsandong",
     "paju-geumchon",
   ]);
+  const [isChipSelected, setIsChipSelected] = useState(true);
 
   const selectedRegions = useMemo(
     () => regions.filter((r) => selectedRegionIds.includes(r.id)),
@@ -37,18 +39,41 @@ export default function TabTwoScreen() {
 
   return (
     <ScrollView className="flex-1 bg-white px-4 py-6">
+      <Text className="mb-4 text-18 font-pretendard-bold">Chip Test</Text>
+
+      <Text className="mb-2 text-14 font-pretendard-semibold">
+        Figma Chip Variants
+      </Text>
+
+      <View className="mb-3 flex-row flex-wrap gap-3">
+        <Chip text="활성" selected />
+        <Chip text="비활성" selected={false} />
+      </View>
+
+      <Text className="mb-2 text-14 font-pretendard-semibold">
+        Toggle Demo
+      </Text>
+
+      <View className="mb-8 flex-row flex-wrap gap-3">
+        <Chip
+          text={isChipSelected ? "선택됨" : "선택 안 됨"}
+          selected={isChipSelected}
+          onPress={() => setIsChipSelected((prev) => !prev)}
+        />
+      </View>
+
       <Text className="mb-4 text-18 font-pretendard-bold">
-        Chip (Parent Managed), Checkbox, AreaCheck Test
+        ChipArea (Parent Managed), Checkbox, AreaCheck Test
       </Text>
 
       <Text className="mb-2 text-14 font-pretendard-semibold">
         선택한 지역 {selectedRegionIds.length}개
       </Text>
 
-      {/* Selected Chips */}
+      {/* Selected ChipAreas */}
       <View className="mb-6 flex-row flex-wrap gap-3">
         {selectedRegions.map((region) => (
-          <Chip
+          <ChipArea
             key={region.id}
             text={region.name}
             onClose={() => removeRegion(region.id)}
