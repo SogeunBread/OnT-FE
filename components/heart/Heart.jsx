@@ -1,8 +1,49 @@
-import React from "react";
-import { View } from "react-native";
+import HeartFilled from "@/assets/icons/heart_filled.svg";
+import HeartOutline from "@/assets/icons/heart_outline.svg";
+import { useState } from "react";
+import { Pressable, View } from "react-native";
 
-const Heart = () => {
-  return <View />;
+const Heart = ({
+  liked,
+  defaultLiked = false,
+  onChange,
+  className = "",
+  iconClassName = "",
+  size = 24,
+  activeColor = "#FF795E", // 여기엔 문자열 색상값만 받기 때문에 색상 코드로 둠
+  inactiveColor = "#111111",
+  hitSlop = 10,
+  ...restProps
+}) => {
+  const isControlled = typeof liked === "boolean";
+  const [internalLiked, setInternalLiked] = useState(defaultLiked);
+
+  const isLiked = isControlled ? liked : internalLiked;
+
+  const handleToggle = () => {
+    const next = !isLiked;
+    if (!isControlled) setInternalLiked(next);
+    onChange?.(next);
+  };
+
+  const Icon = isLiked ? HeartFilled : HeartOutline;
+  const iconColor = isLiked ? activeColor : inactiveColor;
+
+  return (
+    <Pressable
+      {...restProps}
+      onPress={handleToggle}
+      hitSlop={hitSlop}
+      className={`self-start ${className}`}
+      accessibilityRole="button"
+      accessibilityLabel={isLiked ? "좋아요 취소" : "좋아요"}
+      accessibilityState={{ selected: isLiked }}
+    >
+      <View className={iconClassName}>
+        <Icon width={size} height={size} color={iconColor} />
+      </View>
+    </Pressable>
+  );
 };
 
 export default Heart;

@@ -1,8 +1,67 @@
-import React from "react";
-import { View } from "react-native";
+import { colors } from "@/tailwind.config";
+import { Pressable, Text, View } from "react-native";
 
-const Radio = () => {
-  return <View />;
+const Radio = ({
+  checked = false,
+  onPress,
+  disabled = false,
+  label,
+  className,
+  ...props
+}) => {
+  const handlePress = () => {
+    if (!disabled && onPress) {
+      onPress(!checked);
+    }
+  };
+
+  const getBorderColor = () => {
+    if (disabled) {
+      return colors.grayscale.G200;
+    }
+    return checked ? colors.primary.main : colors.grayscale.G400;
+  };
+
+  const borderColor = getBorderColor();
+
+  return (
+    <Pressable
+      {...props}
+      disabled={disabled}
+      onPress={handlePress}
+      className={`flex-row items-center gap-2 ${className}`}
+    >
+      <View
+        className={`w-6 h-6 rounded-full items-center justify-center ${
+          !checked ? "border" : "border-8"
+        }`}
+        style={{
+          backgroundColor: disabled ? colors.grayscale.G200 : "",
+          borderColor: borderColor,
+          opacity: disabled ? 0.6 : 1,
+        }}
+      >
+        {checked && (
+          <View
+            className="w-2 h-2 rounded-full"
+            style={{
+              backgroundColor: "transparent",
+            }}
+          />
+        )}
+      </View>
+      {label && (
+        <Text
+          className="text-14 font-pretendard-regular text-text"
+          style={{
+            opacity: disabled ? 0.6 : 1,
+          }}
+        >
+          {label}
+        </Text>
+      )}
+    </Pressable>
+  );
 };
 
 export default Radio;
