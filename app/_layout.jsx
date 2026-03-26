@@ -2,13 +2,12 @@ import { Redirect, Stack } from "expo-router";
 import "../global.css";
 
 export default function RootLayout() {
-  const isLoggedIn = false; // TODO: auth state
-  const isTrainer = false; // TODO: role state
+  const isLoggedIn = false;
+  const isTrainer = false;
 
-  // 로그인/역할에 따라 기본 진입 라우트 결정
-  // login, trainer 둘 다 false면 devTabs
+  // 로그인 라우트가 연결되기 전까지 비로그인 사용자는 user 탭으로 보냄
   const entry = !isLoggedIn
-    ? "/(devTabs)" // 로그인 전 임시로 dev로 보내도 됨 (원하면)
+    ? "/(userTabs)/home"
     : isTrainer
     ? "/(trainerTabs)/home"
     : "/(userTabs)/home";
@@ -19,9 +18,8 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(userTabs)" />
         <Stack.Screen name="(trainerTabs)" />
-        <Stack.Screen name="(devTabs)" />
 
-        {/* 탭 밖 화면 (오류 발생 시 화면) */}
+        {/* 탭 밖 화면 (오류 발생 시 화면) 404~ */}
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </>
