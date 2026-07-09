@@ -135,14 +135,14 @@ const FeedbackSection = ({
 };
 
 const BottomSheetMeal = ({
-  date = "2026년 5월 25일 (수)",
-  title = "제목",
-  time = "14:30",
-  mealContent = "식사 내용이 여기에 표시됩니다.",
+  date = "",
+  title = "",
+  time = "",
+  mealContent = "",
   feedback = BOTTOM_SHEET_MEAL_FEEDBACK.DONE,
-  trainerName = "김민수 트레이너",
-  trainerFeedback = "피드백 내용",
-  feedbackTime = "3시간 전",
+  trainerName = "",
+  trainerFeedback = "",
+  feedbackTime = "",
   trainerProfileSource,
   photos = DEFAULT_PHOTO_SLOTS,
   photo = true,
