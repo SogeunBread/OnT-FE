@@ -28,12 +28,12 @@ const BUTTON_STYLES = {
   },
   weakDark: {
     default: {
-      backgroundColor: colors.grayscale.G100,
+      backgroundColor: `${colors.grayscale.G100}80`,
       textColor: colors.grayscale.G900,
       fontWeight: "600",
     },
     click: {
-      backgroundColor: `${colors.grayscale.G100}80`,
+      backgroundColor: colors.grayscale.G100,
       textColor: colors.grayscale.G900,
       fontWeight: "600",
     },
