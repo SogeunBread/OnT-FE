@@ -1,4 +1,5 @@
 import { Redirect, Stack } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 
 export default function RootLayout() {
@@ -13,7 +14,7 @@ export default function RootLayout() {
     : "/(userTabs)/home";
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Redirect href={entry} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(userTabs)" />
@@ -22,6 +23,6 @@ export default function RootLayout() {
         {/* 탭 밖 화면 (오류 발생 시 화면) 404~ */}
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
-    </>
+    </GestureHandlerRootView>
   );
 }

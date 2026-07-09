@@ -1,7 +1,13 @@
 import Button from "@/components/button";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useMemo, useRef } from "react";
-import { Image, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import {
+  Image,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 
 export const BOTTOM_SHEET_MEAL_FEEDBACK = Object.freeze({
   DONE: "done",
@@ -25,7 +31,7 @@ const FEEDBACK_ALIASES = {
   none: BOTTOM_SHEET_MEAL_FEEDBACK.TRAINER_NONE,
 };
 
-const DEFAULT_PHOTO_SLOTS = [null, null, null, null];
+const DEFAULT_PHOTO_SLOTS = [];
 
 const normalizeFeedback = (feedback) => {
   if (feedback === true) return BOTTOM_SHEET_MEAL_FEEDBACK.DONE;
@@ -40,40 +46,29 @@ const toImageSource = (source) => {
 };
 
 const PhotoStrip = ({ photos }) => {
-  const photoSlots = photos.length > 0 ? photos : DEFAULT_PHOTO_SLOTS;
+  const photoSlots = photos.filter(Boolean);
 
   if (photoSlots.length === 0) return null;
 
   return (
     <ScrollView
       horizontal
+      nestedScrollEnabled
+      directionalLockEnabled
+      alwaysBounceHorizontal={false}
       showsHorizontalScrollIndicator
       className="w-full"
       contentContainerStyle={{ gap: 10 }}
     >
-      {photoSlots.map((photo, index) => {
-        const source = toImageSource(photo);
-
-        if (!source) {
-          return (
-            <View
-              key={index}
-              className="shrink-0 rounded-[6px] bg-grayscale-G100"
-              style={{ width: 120, height: 120 }}
-            />
-          );
-        }
-
-        return (
-          <Image
-            key={index}
-            source={source}
-            resizeMode="cover"
-            className="shrink-0 rounded-[6px]"
-            style={{ width: 120, height: 120 }}
-          />
-        );
-      })}
+      {photoSlots.map((photo, index) => (
+        <Image
+          key={index}
+          source={toImageSource(photo)}
+          resizeMode="cover"
+          className="shrink-0 rounded-[6px]"
+          style={{ width: 120, height: 120 }}
+        />
+      ))}
     </ScrollView>
   );
 };
@@ -130,7 +125,9 @@ const FeedbackSection = ({
             isWaiting ? "text-grayscale-G500" : "text-text"
           }`}
         >
-          {isWaiting ? "트레이너가 식사 내용을 확인 중입니다." : trainerFeedback}
+          {isWaiting
+            ? "트레이너가 식사 내용을 확인 중입니다."
+            : trainerFeedback}
         </Text>
       </View>
     </View>
@@ -138,10 +135,10 @@ const FeedbackSection = ({
 };
 
 const BottomSheetMeal = ({
-  date = "2026년 2월 25일 (수)",
+  date = "2026년 5월 25일 (수)",
   title = "제목",
   time = "14:30",
-  mealContent = "바나나랑 단백질쉐이크 먹고 끝내려했는데 너무 배고파서 초코파이 하나를 먹어버렸습니다 흑흑",
+  mealContent = "식사 내용이 여기에 표시됩니다.",
   feedback = BOTTOM_SHEET_MEAL_FEEDBACK.DONE,
   trainerName = "김민수 트레이너",
   trainerFeedback = "피드백 내용",
@@ -169,15 +166,18 @@ const BottomSheetMeal = ({
   const shouldShowPhoto = hasPhotos ?? photo;
   const shouldShowDetail = hasMealContent ?? datail ?? detail;
   const canEdit = normalizedFeedback !== BOTTOM_SHEET_MEAL_FEEDBACK.DONE;
-  const resolvedMaxHeight = Math.min(maxHeight ?? windowHeight * 0.9, windowHeight * 0.9);
+  const resolvedMaxHeight = Math.min(
+    maxHeight ?? windowHeight * 0.9,
+    windowHeight * 0.9,
+  );
   const resolvedMinHeight = Math.min(minHeight, resolvedMaxHeight);
   const resolvedInitialHeight = Math.min(
     Math.max(initialHeight, resolvedMinHeight),
-    resolvedMaxHeight
+    resolvedMaxHeight,
   );
   const snapPoints = useMemo(
     () => [resolvedMinHeight, resolvedInitialHeight, resolvedMaxHeight],
-    [resolvedInitialHeight, resolvedMaxHeight, resolvedMinHeight]
+    [resolvedInitialHeight, resolvedMaxHeight, resolvedMinHeight],
   );
 
   if (!visible) return null;
@@ -261,7 +261,7 @@ const BottomSheetMeal = ({
           <View className="flex-1">
             <Button
               text="수정"
-              variant="weak"
+              variant={canEdit ? "weak" : "disabled"}
               disabled={!canEdit}
               onPress={onEdit}
             />
@@ -270,7 +270,6 @@ const BottomSheetMeal = ({
             <Button text="삭제" variant="weakDark" onPress={onDelete} />
           </View>
         </View>
-
       </BottomSheetScrollView>
     </BottomSheet>
   );
