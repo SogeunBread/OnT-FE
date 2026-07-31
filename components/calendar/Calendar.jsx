@@ -44,7 +44,7 @@ const Calendar = () => {
           className="h-[18px] w-[18px]"
           onPress={() => setCurrentMonth((month) => subMonths(month, 1))}
         >
-          <LeftArrow size={18} color="#B7B7B7" />
+          <LeftArrow size={18} color="#B7B7B7" strokeWidth={3} />
         </Pressable>
 
         <Text className="text-16 font-pretendard-semibold text-text">
@@ -55,12 +55,12 @@ const Calendar = () => {
           className="h-[18px] w-[18px]"
           onPress={() => setCurrentMonth((month) => addMonths(month, 1))}
         >
-          <RightArrow size={18} color="#B7B7B7" />
+          <RightArrow size={18} color="#B7B7B7" strokeWidth={3} />
         </Pressable>
       </View>
 
       <View>
-        <View className="flex-row items-center gap-[6px] border-b border-b-grayscale-G100 py-1">
+        <View className="flex-row items-center border-b border-b-grayscale-G100 py-1">
           {week.map((day) => (
             <Text
               key={day}
@@ -74,7 +74,7 @@ const Calendar = () => {
         {weeks.map((dates) => (
           <View
             key={dates[0].toISOString()}
-            className="flex-row items-center gap-[6px] border-b border-b-grayscale-G100"
+            className="flex-row items-center border-b border-b-grayscale-G100"
           >
             {dates.map((date) => {
               const isCurrentMonth = isSameMonth(date, currentMonth);
@@ -100,6 +100,11 @@ const Calendar = () => {
                   : "bg-grayscale-G300"
                 : "bg-transparent";
 
+              const fontWeight =
+                isSelected || isTodayDate
+                  ? "font-pretendard-semibold"
+                  : "font-pretendard-regular";
+
               return (
                 <Pressable
                   key={date.toISOString()}
@@ -109,13 +114,7 @@ const Calendar = () => {
                   <View
                     className={`h-7 w-7 items-center justify-center rounded-[20px] ${backgroundColor}`}
                   >
-                    <Text
-                      className={`text-14 ${
-                        isSelected
-                          ? "font-pretendard-semibold"
-                          : "font-pretendard-regular"
-                      } ${textColor}`}
-                    >
+                    <Text className={`text-14 ${textColor} ${fontWeight}`}>
                       {format(date, "d")}
                     </Text>
                   </View>
