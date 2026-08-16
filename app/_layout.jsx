@@ -1,4 +1,4 @@
-import { Redirect, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import "../global.css";
 
 export default function RootLayout() {
@@ -14,7 +14,7 @@ export default function RootLayout() {
 
   return (
     <>
-      <Redirect href={entry} />
+      {/* <Redirect href={entry} /> */}
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(userTabs)" />
         <Stack.Screen name="(trainerTabs)" />
