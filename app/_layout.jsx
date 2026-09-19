@@ -22,6 +22,6 @@ export default function RootLayout() {
         {/* 탭 밖 화면 (오류 발생 시 화면) 404~ */}
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
-    </>
+    </GestureHandlerRootView>
   );
 }
