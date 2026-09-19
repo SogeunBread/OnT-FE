@@ -1,5 +1,4 @@
-import { Redirect, Stack } from "expo-router";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Stack } from "expo-router";
 import "../global.css";
 
 export default function RootLayout() {
@@ -14,8 +13,8 @@ export default function RootLayout() {
     : "/(userTabs)/home";
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Redirect href={entry} />
+    <>
+      {/* <Redirect href={entry} /> */}
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(userTabs)" />
         <Stack.Screen name="(trainerTabs)" />
