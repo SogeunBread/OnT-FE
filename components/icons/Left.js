@@ -1,5 +1,5 @@
 import Svg, { Path } from "react-native-svg";
-const SvgLeft = ({ size = 24, color = "#111", ...props }) => (
+const SvgLeft = ({ size = 24, color = "#111", strokeWidth = 2, ...props }) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -12,7 +12,7 @@ const SvgLeft = ({ size = 24, color = "#111", ...props }) => (
       stroke={color}
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={2}
+      strokeWidth={strokeWidth}
       d="m16 20-8-8 8-8"
     />
   </Svg>
