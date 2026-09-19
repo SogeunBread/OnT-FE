@@ -26,6 +26,13 @@ export default function UserTabsLayout() {
         <Tabs.Screen key={name} name={name} />
       ))}
 
+      <Tabs.Screen
+        name="trainer-matching"
+        options={{
+          href: null,
+        }}
+      />
+
       {/* 탭에 노출 안되는 화면이 user group에 있다면 */}
       {/* <Tabs.Screen name="something" options={{ href: null }} /> */}
     </Tabs>
