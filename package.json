@@ -11,6 +11,9 @@
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "@gorhom/bottom-sheet": "^5.2.14",
+    "@ncdai/react-wheel-picker": "^1.2.3",
+    "@quidone/react-native-wheel-picker": "^1.7.1",
+    "@react-native-community/datetimepicker": "8.4.4",
     "@react-navigation/native": "^7.1.8",
     "date-fns": "^4.4.0",
     "expo": "~54.0.33",
@@ -23,6 +26,7 @@
     "expo-web-browser": "~15.0.10",
     "nativewind": "^4.2.1",
     "react": "19.1.0",
+    "react-datepicker": "^9.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
     "react-native-gesture-handler": "^2.31.2",
