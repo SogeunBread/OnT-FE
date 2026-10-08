@@ -4,6 +4,7 @@ import Field from "@/components/field";
 import FieldLong from "@/components/field-long";
 import HeaderDetail from "@/components/header_detail";
 import MealDateTimeField from "@/components/meal-record/MealDateTimeField";
+import MealPhotoField from "@/components/meal-record/MealPhotoField";
 import { format, isValid, parseISO } from "date-fns";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -11,7 +12,6 @@ import {
   BackHandler,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   Text,
   View,
@@ -44,32 +44,12 @@ const FieldTitle = ({ children, count, required = false }) => (
   </View>
 );
 
-const PhotoAddButton = ({ photoCount = 0, onPress }) => (
-  <Pressable
-    accessibilityLabel="식사 사진 추가"
-    accessibilityRole="button"
-    className="h-[82px] w-[82px] items-center justify-center rounded-[6px] border border-grayscale-G300 bg-white"
-    disabled={photoCount >= MAX_PHOTO_COUNT}
-    onPress={onPress}
-  >
-    <Text
-      className="text-center font-pretendard-regular text-[28px] leading-[28px] text-grayscale-G400"
-      style={{ includeFontPadding: false }}
-    >
-      +
-    </Text>
-    <Text className="mt-1 text-12 font-pretendard-regular text-grayscale-G400">
-      사진 추가
-    </Text>
-  </Pressable>
-);
-
 const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, onSubmit }) => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [title, setTitle] = useState("");
   const [mealContent, setMealContent] = useState("");
-  const [photoCount] = useState(0);
+  const [photos, setPhotos] = useState([]);
   const [feedbackRequested, setFeedbackRequested] = useState(false);
   const [mealDateTime, setMealDateTime] = useState(() => {
     const initialValue = parseISO(`${selectedDate}T${initialTime}`);
@@ -87,6 +67,7 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
     useCallback(() => {
       setTitle("");
       setMealContent("");
+      setPhotos([]);
       setFeedbackRequested(false);
       const initialValue = parseISO(`${selectedDate}T${formatCurrentTime()}`);
       setMealDateTime(isValid(initialValue) ? initialValue : new Date());
@@ -129,7 +110,7 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
       date,
       time: format(mealDateTime, "HH:mm"),
       mealContent: mealContent.trim(),
-      photos: [],
+      photos,
       hasMatchedTrainer,
       feedbackRequested,
     });
@@ -197,12 +178,10 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
           </View>
 
           <View className="w-full gap-2">
-            <FieldTitle count={`${photoCount}/${MAX_PHOTO_COUNT}`}>
+            <FieldTitle count={`${photos.length}/${MAX_PHOTO_COUNT}`}>
               식사 사진
             </FieldTitle>
-            <View className="w-full flex-row">
-              <PhotoAddButton photoCount={photoCount} />
-            </View>
+            <MealPhotoField photos={photos} onChange={setPhotos} maxPhotos={MAX_PHOTO_COUNT} />
           </View>
 
           <View className="w-full gap-2">
