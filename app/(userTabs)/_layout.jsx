@@ -6,7 +6,10 @@ import { Tabs } from "expo-router";
 export default function UserTabsLayout() {
   return (
     <Tabs
-      tabBar={(props) => <NavigationBar {...props} tabs={userTabs} />}
+      tabBar={(props) => {
+        const route = props.state.routes[props.state.index];
+        return route.name === "meal-record" ? null : <NavigationBar {...props} tabs={userTabs} />;
+      }}
       screenOptions={{
         headerShown: true,
         header: ({ route }) => {
@@ -32,9 +35,10 @@ export default function UserTabsLayout() {
           href: null,
         }}
       />
-
-      {/* 탭에 노출 안되는 화면이 user group에 있다면 */}
-      {/* <Tabs.Screen name="something" options={{ href: null }} /> */}
+      <Tabs.Screen
+        name="meal-record"
+        options={{ href: null, headerShown: false }}
+      />
     </Tabs>
   );
 }

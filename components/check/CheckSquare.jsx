@@ -26,6 +26,7 @@ const CheckSquare = ({
   className = "",
   boxClassName = "",
   labelClassName = "",
+  children,
   disabled,
   ...restProps
 }) => {
@@ -68,13 +69,13 @@ const CheckSquare = ({
         </View>
       </View>
 
-      {label ? (
+      {children ?? (label ? (
         <Text
           className={`text-14 font-pretendard-medium ${currentStyle.label} ${labelClassName}`}
         >
           {label}
         </Text>
-      ) : null}
+      ) : null)}
     </Pressable>
   );
 };
