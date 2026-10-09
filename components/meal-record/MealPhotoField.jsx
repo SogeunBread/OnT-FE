@@ -92,24 +92,6 @@ export default function MealPhotoField({ photos, onChange, maxPhotos = 4 }) {
     <View className="gap-2">
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View className="flex-row gap-3">
-          <Pressable
-            accessibilityLabel="식사 사진 추가"
-            accessibilityRole="button"
-            accessibilityState={{ disabled: full || isPicking, busy: isPicking }}
-            className="h-[82px] w-[82px] items-center justify-center rounded-[6px] border border-grayscale-G300 bg-white"
-            style={{ opacity: full || isPicking ? 0.45 : 1 }}
-            disabled={full || isPicking}
-            onPress={pickPhotos}
-          >
-            {isPicking ? (
-              <ActivityIndicator color="#707070" />
-            ) : (
-              <Feather name="plus" size={28} color="#B7B7B7" />
-            )}
-            <Text className="mt-1 text-12 font-pretendard-regular text-grayscale-G400">
-              사진 추가
-            </Text>
-          </Pressable>
           {photos.map((photo, index) => (
             <View key={photo.id} className="h-[82px] w-[82px]">
               <Pressable
@@ -123,7 +105,7 @@ export default function MealPhotoField({ photos, onChange, maxPhotos = 4 }) {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={`식사 사진 ${index + 1} 삭제`}
-                className="absolute -right-1 -top-1 h-11 w-11 items-end justify-start p-1.5"
+                className="absolute -right-1 -top-1 h-8 w-8 items-end justify-start p-1.5"
                 onPress={() => removePhoto(photo.id)}
               >
                 <View className="h-5 w-5 items-center justify-center rounded-full bg-black/70">
@@ -132,6 +114,26 @@ export default function MealPhotoField({ photos, onChange, maxPhotos = 4 }) {
               </Pressable>
             </View>
           ))}
+          {!full && (
+            <Pressable
+              accessibilityLabel="식사 사진 추가"
+              accessibilityRole="button"
+              accessibilityState={{ disabled: isPicking, busy: isPicking }}
+              className="h-[82px] w-[82px] items-center justify-center rounded-[6px] border border-grayscale-G300 bg-white"
+              style={{ opacity: isPicking ? 0.45 : 1 }}
+              disabled={isPicking}
+              onPress={pickPhotos}
+            >
+              {isPicking ? (
+                <ActivityIndicator color="#707070" />
+              ) : (
+                <Feather name="plus" size={28} color="#B7B7B7" />
+              )}
+              <Text className="mt-1 text-12 font-pretendard-regular text-grayscale-G400">
+                사진 추가
+              </Text>
+            </Pressable>
+          )}
         </View>
       </ScrollView>
       {error ? (
