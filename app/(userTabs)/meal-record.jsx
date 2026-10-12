@@ -5,9 +5,11 @@ import FieldLong from "@/components/field-long";
 import HeaderDetail from "@/components/header_detail";
 import MealDateTimeField from "@/components/meal-record/MealDateTimeField";
 import MealPhotoField from "@/components/meal-record/MealPhotoField";
-import { format, isValid, parseISO } from "date-fns";
+import { useMealRecords } from "@/components/meal-record/MealRecordsContext";
+import { canRecordMealOnDate } from "@/components/meal-record/meal-record-date";
+import { endOfDay, format, parseISO } from "date-fns";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   BackHandler,
   KeyboardAvoidingView,
@@ -47,13 +49,15 @@ const FieldTitle = ({ children, count, required = false }) => (
 const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, onSubmit }) => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { today } = useMealRecords();
   const [title, setTitle] = useState("");
   const [mealContent, setMealContent] = useState("");
   const [photos, setPhotos] = useState([]);
   const [feedbackRequested, setFeedbackRequested] = useState(false);
+  const submitted = useRef(false);
   const [mealDateTime, setMealDateTime] = useState(() => {
     const initialValue = parseISO(`${selectedDate}T${initialTime}`);
-    return isValid(initialValue) ? initialValue : new Date();
+    return canRecordMealOnDate(initialValue) ? initialValue : new Date();
   });
 
   const handlePressBack = useCallback(() => {
@@ -65,12 +69,13 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
 
   useFocusEffect(
     useCallback(() => {
+      submitted.current = false;
       setTitle("");
       setMealContent("");
       setPhotos([]);
       setFeedbackRequested(false);
       const initialValue = parseISO(`${selectedDate}T${formatCurrentTime()}`);
-      setMealDateTime(isValid(initialValue) ? initialValue : new Date());
+      setMealDateTime(canRecordMealOnDate(initialValue) ? initialValue : new Date());
 
       if (Platform.OS !== "android") return;
 
@@ -83,6 +88,7 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
   );
 
   const handleDateChange = (value) => {
+    if (!canRecordMealOnDate(value)) return;
     setMealDateTime((previous) => new Date(
       value.getFullYear(),
       value.getMonth(),
@@ -100,12 +106,13 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
     });
   };
 
-  const canSubmit = title.trim().length > 0;
+  const canSubmit = title.trim().length > 0 && canRecordMealOnDate(mealDateTime, today);
 
   const handlePressSubmit = () => {
-    if (!canSubmit) return;
+    if (!canSubmit || !canRecordMealOnDate(mealDateTime) || submitted.current || !onSubmit) return;
+    submitted.current = true;
     const date = format(mealDateTime, "yyyy-MM-dd");
-    onSubmit?.({
+    const result = onSubmit({
       title: title.trim(),
       date,
       time: format(mealDateTime, "HH:mm"),
@@ -114,6 +121,7 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
       hasMatchedTrainer,
       feedbackRequested,
     });
+    if (result === false) submitted.current = false;
   };
 
   return (
@@ -162,6 +170,7 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
               <MealDateTimeField
                 label="날짜"
                 mode="date"
+                maximumDate={endOfDay(today)}
                 value={mealDateTime}
                 onChange={handleDateChange}
               />
@@ -244,6 +253,8 @@ const MatchedTrainerMealRecord = (props) => <MealRecordForm {...props} hasMatche
 const UnmatchedTrainerMealRecord = (props) => <MealRecordForm {...props} hasMatchedTrainer={false} />;
 
 export default function MealRecordScreen({ hasMatchedTrainer = true, onSubmit }) {
+  const router = useRouter();
+  const { addRecord } = useMealRecords();
   const params = useLocalSearchParams();
   const selectedDate = typeof params.date === "string"
     ? params.date
@@ -253,12 +264,21 @@ export default function MealRecordScreen({ hasMatchedTrainer = true, onSubmit })
     ? MatchedTrainerMealRecord
     : UnmatchedTrainerMealRecord;
 
+  const handleRegister = (draft) => {
+    const record = addRecord(draft);
+    if (!record) return false;
+    router.navigate({
+      pathname: "/(userTabs)/manage",
+      params: { date: record.date },
+    });
+  };
+
   return (
     <Screen
       key={selectedDate}
       selectedDate={selectedDate}
       initialTime={initialTime}
-      onSubmit={onSubmit}
+      onSubmit={onSubmit ?? handleRegister}
     />
   );
 }
