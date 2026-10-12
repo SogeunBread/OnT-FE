@@ -3,12 +3,13 @@ import CheckSquare from "@/components/check/CheckSquare";
 import Field from "@/components/field";
 import FieldLong from "@/components/field-long";
 import HeaderDetail from "@/components/header_detail";
+import { MEAL_CARD_FEEDBACK } from "@/components/meal_card/MealCard";
 import MealDateTimeField from "@/components/meal-record/MealDateTimeField";
 import MealPhotoField from "@/components/meal-record/MealPhotoField";
 import { useMealRecords } from "@/components/meal-record/MealRecordsContext";
 import { canRecordMealOnDate } from "@/components/meal-record/meal-record-date";
 import { endOfDay, format, parseISO } from "date-fns";
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { Redirect, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useMemo, useRef, useState } from "react";
 import {
   BackHandler,
@@ -20,7 +21,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const MAX_TITLE_LENGTH = 20;
 const MAX_PHOTO_COUNT = 4;
 const MAX_CONTENT_LENGTH = 200;
 
@@ -46,7 +46,7 @@ const FieldTitle = ({ children, count, required = false }) => (
   </View>
 );
 
-const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, onSubmit }) => {
+const MealRecordForm = ({ selectedDate, initialTime, initialRecord, hasMatchedTrainer = false, onSubmit }) => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { today } = useMealRecords();
@@ -54,6 +54,7 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
   const [mealContent, setMealContent] = useState("");
   const [photos, setPhotos] = useState([]);
   const [feedbackRequested, setFeedbackRequested] = useState(false);
+  const retainedPhotoUris = useMemo(() => initialRecord?.photos.map(({ uri }) => uri) ?? [], [initialRecord]);
   const submitted = useRef(false);
   const [mealDateTime, setMealDateTime] = useState(() => {
     const initialValue = parseISO(`${selectedDate}T${initialTime}`);
@@ -70,11 +71,11 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
   useFocusEffect(
     useCallback(() => {
       submitted.current = false;
-      setTitle("");
-      setMealContent("");
-      setPhotos([]);
-      setFeedbackRequested(false);
-      const initialValue = parseISO(`${selectedDate}T${formatCurrentTime()}`);
+      setTitle(initialRecord?.title ?? "");
+      setMealContent(initialRecord?.mealContent ?? "");
+      setPhotos(initialRecord?.photos ?? []);
+      setFeedbackRequested(initialRecord?.feedbackRequested ?? false);
+      const initialValue = parseISO(`${selectedDate}T${initialRecord?.time ?? formatCurrentTime()}`);
       setMealDateTime(canRecordMealOnDate(initialValue) ? initialValue : new Date());
 
       if (Platform.OS !== "android") return;
@@ -84,7 +85,7 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
         return true;
       });
       return () => subscription.remove();
-    }, [handlePressBack, selectedDate]),
+    }, [handlePressBack, selectedDate, initialRecord]),
   );
 
   const handleDateChange = (value) => {
@@ -149,15 +150,9 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
           }}
         >
           <View className="w-full gap-2">
-            <FieldTitle
-              required
-              count={`${title.length}/${MAX_TITLE_LENGTH}`}
-            >
-              제목
-            </FieldTitle>
+            <FieldTitle required>제목</FieldTitle>
             <Field
               className="w-full rounded-lg"
-              maxLength={MAX_TITLE_LENGTH}
               placeholder="예: 아침"
               value={title}
               onChangeText={setTitle}
@@ -190,7 +185,7 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
             <FieldTitle count={`${photos.length}/${MAX_PHOTO_COUNT}`}>
               식사 사진
             </FieldTitle>
-            <MealPhotoField photos={photos} onChange={setPhotos} maxPhotos={MAX_PHOTO_COUNT} />
+            <MealPhotoField photos={photos} onChange={setPhotos} maxPhotos={MAX_PHOTO_COUNT} retainedPhotoUris={retainedPhotoUris} />
           </View>
 
           <View className="w-full gap-2">
@@ -235,10 +230,10 @@ const MealRecordForm = ({ selectedDate, initialTime, hasMatchedTrainer = false, 
             </CheckSquare>
           )}
           <Button
-            accessibilityLabel="식단 기록 등록"
+            accessibilityLabel={initialRecord ? "식단 기록 수정" : "식단 기록 등록"}
             className="w-full"
             disabled={!canSubmit}
-            text="등록"
+            text={initialRecord ? "저장" : "등록"}
             variant={canSubmit ? "fill" : "disabled"}
             onPress={handlePressSubmit}
           />
@@ -254,18 +249,20 @@ const UnmatchedTrainerMealRecord = (props) => <MealRecordForm {...props} hasMatc
 
 export default function MealRecordScreen({ hasMatchedTrainer = true, onSubmit }) {
   const router = useRouter();
-  const { addRecord } = useMealRecords();
+  const { records, addRecord, updateRecord } = useMealRecords();
   const params = useLocalSearchParams();
-  const selectedDate = typeof params.date === "string"
+  const editingId = typeof params.recordId === "string" ? params.recordId : null;
+  const initialRecord = records.find((record) => record.id === editingId);
+  const selectedDate = initialRecord?.date ?? (typeof params.date === "string"
     ? params.date
-    : format(new Date(), "yyyy-MM-dd");
+    : format(new Date(), "yyyy-MM-dd"));
   const initialTime = useMemo(formatCurrentTime, []);
-  const Screen = hasMatchedTrainer
+  const Screen = (initialRecord?.hasMatchedTrainer ?? hasMatchedTrainer)
     ? MatchedTrainerMealRecord
     : UnmatchedTrainerMealRecord;
 
   const handleRegister = (draft) => {
-    const record = addRecord(draft);
+    const record = editingId ? updateRecord(editingId, draft) : addRecord(draft);
     if (!record) return false;
     router.navigate({
       pathname: "/(userTabs)/manage",
@@ -273,11 +270,16 @@ export default function MealRecordScreen({ hasMatchedTrainer = true, onSubmit })
     });
   };
 
+  if (editingId && (!initialRecord || initialRecord.feedback === MEAL_CARD_FEEDBACK.DONE)) {
+    return <Redirect href="/(userTabs)/manage" />;
+  }
+
   return (
     <Screen
-      key={selectedDate}
+      key={editingId ?? selectedDate}
       selectedDate={selectedDate}
-      initialTime={initialTime}
+      initialTime={initialRecord?.time ?? initialTime}
+      initialRecord={initialRecord}
       onSubmit={onSubmit ?? handleRegister}
     />
   );

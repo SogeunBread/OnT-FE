@@ -1,7 +1,7 @@
 import ButtonSmall from "@/components/button/ButtonSmall";
 import Calendar from "@/components/calendar";
 import MealCard, { MEAL_CARD_FEEDBACK } from "@/components/meal_card/MealCard";
-import MealPhotoViewer from "@/components/meal-record/MealPhotoViewer";
+import MealRecordDetailSheet from "@/components/meal-record/MealRecordDetailSheet";
 import { useMealRecords } from "@/components/meal-record/MealRecordsContext";
 import { canRecordMealOnDate } from "@/components/meal-record/meal-record-date";
 import Tab from "@/components/tab";
@@ -20,8 +20,10 @@ const CARD_STYLE = { width: "100%", minHeight: 96, boxShadow: "0px 0px 2px rgba(
 
 export default function UserManageTab() {
   const router = useRouter();
-  const { records, today } = useMealRecords();
-  const [viewerPhotos, setViewerPhotos] = useState(null);
+  const { records, today, deleteRecord } = useMealRecords();
+  const [selectedRecordId, setSelectedRecordId] = useState(null);
+  const selectedRecord = records.find((record) => record.id === selectedRecordId);
+  const closeDetail = useCallback(() => setSelectedRecordId(null), []);
   const { date } = useLocalSearchParams();
   const [selectedDate, setSelectedDate] = useState(() => {
     const requestedDate = typeof date === "string" ? parseISO(date) : null;
@@ -33,7 +35,7 @@ export default function UserManageTab() {
     if (requestedDate && isValid(requestedDate)) setSelectedDate(requestedDate);
   }, [date]);
 
-  useFocusEffect(useCallback(() => () => setViewerPhotos(null), []));
+  useFocusEffect(useCallback(() => closeDetail, [closeDetail]));
 
   const dateKey = format(selectedDate, "yyyy-MM-dd");
   const isFutureDate = !canRecordMealOnDate(selectedDate, today);
@@ -106,14 +108,23 @@ export default function UserManageTab() {
               badgeStyle={BADGE_STYLES[record.feedback]}
               thumbnailSource={record.photos[0]?.uri}
               style={CARD_STYLE}
-              onPress={record.photos.length ? () => setViewerPhotos(record.photos) : undefined}
+              onPress={() => setSelectedRecordId(record.id)}
               accessibilityLabel={`${record.title}, ${record.time}`}
             />
           ))}
         </View>
       </ScrollView>
-      {viewerPhotos && (
-        <MealPhotoViewer photos={viewerPhotos} onClose={() => setViewerPhotos(null)} />
+      {selectedRecord && (
+        <MealRecordDetailSheet
+          key={selectedRecord.id}
+          record={selectedRecord}
+          onClose={closeDetail}
+          onDelete={deleteRecord}
+          onEdit={() => {
+            closeDetail();
+            router.push({ pathname: "/(userTabs)/meal-record", params: { recordId: selectedRecord.id, date: selectedRecord.date } });
+          }}
+        />
       )}
     </View>
   );

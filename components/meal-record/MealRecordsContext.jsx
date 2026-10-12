@@ -3,11 +3,28 @@ import { addDays, isSameDay, startOfDay } from "date-fns";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AppState, Platform } from "react-native";
 import { canRecordMealOnDate } from "./meal-record-date";
+import {
+  createFeedbackMealSample,
+  createNoTrainerMealSample,
+  createNotRequestedMealSample,
+  createWaitingMealSample,
+} from "./meal-feedback-sample";
 
 const MealRecordsContext = createContext(null);
 
+const feedbackForDraft = (draft) => !draft.hasMatchedTrainer
+  ? MEAL_CARD_FEEDBACK.NONE
+  : draft.feedbackRequested
+    ? MEAL_CARD_FEEDBACK.WAITING
+    : MEAL_CARD_FEEDBACK.NOT_REQUESTED;
+
 export function MealRecordsProvider({ children }) {
-  const [records, setRecords] = useState([]);
+  const [records, setRecords] = useState(() => [
+    createFeedbackMealSample(),
+    createWaitingMealSample(),
+    createNotRequestedMealSample(),
+    createNoTrainerMealSample(),
+  ]);
   const [today, setToday] = useState(() => startOfDay(new Date()));
   const nextId = useRef(0);
   const photoUrls = useRef(new Set());
@@ -39,31 +56,49 @@ export function MealRecordsProvider({ children }) {
     };
   }, []);
 
-  const addRecord = useCallback((draft) => {
-    if (!canRecordMealOnDate(draft.date)) return null;
+  const savePhotos = useCallback((draftPhotos) => {
     // The form releases its web previews when cleared; saved photos own separate URLs.
-    const photos = draft.photos.map((photo) => {
+    return draftPhotos.map((photo) => {
       if (Platform.OS !== "web" || !photo.file) return { ...photo };
       const uri = URL.createObjectURL(photo.file);
       photoUrls.current.add(uri);
       const { file, ...savedPhoto } = photo;
       return { ...savedPhoto, uri };
     });
+  }, []);
+
+  const addRecord = useCallback((draft) => {
+    if (!canRecordMealOnDate(draft.date)) return null;
     const record = {
       ...draft,
       id: `meal-record-${++nextId.current}`,
-      photos,
-      feedback: !draft.hasMatchedTrainer
-        ? MEAL_CARD_FEEDBACK.NONE
-        : draft.feedbackRequested
-          ? MEAL_CARD_FEEDBACK.WAITING
-          : MEAL_CARD_FEEDBACK.NOT_REQUESTED,
+      photos: savePhotos(draft.photos),
+      feedback: feedbackForDraft(draft),
     };
     setRecords((previous) => [...previous, record]);
     return record;
-  }, []);
+  }, [savePhotos]);
 
-  const value = useMemo(() => ({ records, addRecord, today }), [records, addRecord, today]);
+  const updateRecord = useCallback((id, draft) => {
+    const previous = records.find((record) => record.id === id);
+    if (!previous || previous.feedback === MEAL_CARD_FEEDBACK.DONE || !canRecordMealOnDate(draft.date)) return null;
+    const record = { ...previous, ...draft, id, photos: savePhotos(draft.photos), feedback: feedbackForDraft(draft) };
+    previous.photos.forEach(({ uri }) => {
+      if (!record.photos.some((photo) => photo.uri === uri) && photoUrls.current.delete(uri)) URL.revokeObjectURL(uri);
+    });
+    setRecords((items) => items.map((item) => item.id === id ? record : item));
+    return record;
+  }, [records, savePhotos]);
+
+  const deleteRecord = useCallback((id) => {
+    const record = records.find((item) => item.id === id);
+    record?.photos.forEach(({ uri }) => {
+      if (photoUrls.current.delete(uri)) URL.revokeObjectURL(uri);
+    });
+    setRecords((previous) => previous.filter((item) => item.id !== id));
+  }, [records]);
+
+  const value = useMemo(() => ({ records, addRecord, updateRecord, deleteRecord, today }), [records, addRecord, updateRecord, deleteRecord, today]);
   return <MealRecordsContext.Provider value={value}>{children}</MealRecordsContext.Provider>;
 }
 

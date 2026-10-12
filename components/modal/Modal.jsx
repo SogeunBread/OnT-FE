@@ -11,6 +11,7 @@ const Modal = ({
   rightButtonText = "button",
   onLeftPress = () => {},
   onRightPress = () => {},
+  style,
 }) => {
   const hasTitle = typeof title === "string" && title.trim().length > 0;
   const hasContent = typeof content === "string" && content.trim().length > 0;
@@ -18,7 +19,7 @@ const Modal = ({
   const shouldShowContent = showContent ?? hasContent;
 
   return (
-    <View className="w-[358px] rounded-[12px] bg-white px-[12px] pt-[20px] pb-[12px] items-center gap-[16px]">
+    <View style={style} className="w-[358px] rounded-[12px] bg-white px-[12px] pt-[20px] pb-[12px] items-center gap-[16px]">
       {(shouldShowTitle || shouldShowContent) && (
         <View className="w-full items-center gap-[4px]">
           {shouldShowTitle && (

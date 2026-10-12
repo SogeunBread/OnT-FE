@@ -9,7 +9,7 @@ function releasePhoto(photo) {
   if (Platform.OS === "web" && photo.uri.startsWith("blob:")) URL.revokeObjectURL(photo.uri);
 }
 
-export default function MealPhotoField({ photos, onChange, maxPhotos = 4 }) {
+export default function MealPhotoField({ photos, onChange, maxPhotos = 4, retainedPhotoUris = [] }) {
   const [isPicking, setIsPicking] = useState(false);
   const [error, setError] = useState("");
   const [viewingIndex, setViewingIndex] = useState(null);
@@ -17,20 +17,26 @@ export default function MealPhotoField({ photos, onChange, maxPhotos = 4 }) {
   const mountedRef = useRef(false);
   const pickingRef = useRef(false);
   const nextId = useRef(1);
+  const retainedUrisRef = useRef(retainedPhotoUris);
+  retainedUrisRef.current = retainedPhotoUris;
+  // Existing record previews are owned by the store, not the editing form.
+  const releaseDraftPhoto = useCallback((photo) => {
+    if (!retainedUrisRef.current.includes(photo.uri)) releasePhoto(photo);
+  }, []);
 
   useEffect(() => {
     const previous = photosRef.current;
     photosRef.current = photos;
-    previous.filter((photo) => !photos.some((next) => next.id === photo.id)).forEach(releasePhoto);
-  }, [photos]);
+    previous.filter((photo) => !photos.some((next) => next.uri === photo.uri)).forEach(releaseDraftPhoto);
+  }, [photos, releaseDraftPhoto]);
 
   useEffect(() => {
     mountedRef.current = true;
     return () => {
       mountedRef.current = false;
-      photosRef.current.forEach(releasePhoto);
+      photosRef.current.forEach(releaseDraftPhoto);
     };
-  }, []);
+  }, [releaseDraftPhoto]);
 
   const closeViewer = useCallback(() => setViewingIndex(null), []);
   useFocusEffect(useCallback(() => closeViewer, [closeViewer]));
@@ -68,7 +74,11 @@ export default function MealPhotoField({ photos, onChange, maxPhotos = 4 }) {
       if (valid.length !== result.assets.length) setError("불러올 수 없는 사진이 있어요. 다른 사진을 선택해 주세요.");
       else if (accepted.length < valid.length) setError(`사진은 최대 ${maxPhotos}장까지 추가할 수 있어요.`);
 
-      const added = accepted.map((asset) => ({ ...asset, id: `meal-photo-${nextId.current++}` }));
+      const added = accepted.map((asset) => {
+        let id;
+        do { id = `meal-photo-${nextId.current++}`; } while (current.some((photo) => photo.id === id));
+        return { ...asset, id };
+      });
       const next = [...current, ...added];
       photosRef.current = next;
       onChange(next);
