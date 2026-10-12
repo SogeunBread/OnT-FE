@@ -11,7 +11,7 @@ import "./meal-date-time-picker.css";
 
 registerLocale("ko", ko);
 
-export default function MealDateTimeField({ label, mode, value, onChange }) {
+export default function MealDateTimeField({ label, mode, value, onChange, maximumDate }) {
   const insets = useSafeAreaInsets();
   const [visible, setVisible] = useState(false);
   const [draftValue, setDraftValue] = useState(value);
@@ -82,6 +82,7 @@ export default function MealDateTimeField({ label, mode, value, onChange }) {
                   <DatePicker
                     inline
                     selected={draftValue}
+                    maxDate={maximumDate}
                     onChange={(selectedValue) => {
                       if (selectedValue && isValid(selectedValue)) {
                         setDraftValue(selectedValue);

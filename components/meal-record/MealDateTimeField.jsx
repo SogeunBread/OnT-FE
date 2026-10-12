@@ -6,7 +6,7 @@ import { Keyboard, Modal, Platform, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MealTimePicker from "./MealTimePicker";
 
-export default function MealDateTimeField({ label, mode, value, onChange }) {
+export default function MealDateTimeField({ label, mode, value, onChange, maximumDate }) {
   const insets = useSafeAreaInsets();
   const [visible, setVisible] = useState(false);
   const [draftValue, setDraftValue] = useState(value);
@@ -23,6 +23,7 @@ export default function MealDateTimeField({ label, mode, value, onChange }) {
       DateTimePickerAndroid.open({
         value,
         mode,
+        maximumDate,
         display: "calendar",
         is24Hour: true,
         positiveButton: { label: "확인", textColor: "#FF795E" },
@@ -98,6 +99,7 @@ export default function MealDateTimeField({ label, mode, value, onChange }) {
                 <DateTimePicker
                   value={draftValue}
                   mode={mode}
+                  maximumDate={maximumDate}
                   display="inline"
                   locale="ko-KR"
                   themeVariant="light"

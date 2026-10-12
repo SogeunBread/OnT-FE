@@ -4,12 +4,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const LOGO_BOX_WIDTH = 46;
 
-const HeaderMain = ({ isHome = false, menuName = "메뉴", onPressBell }) => {
+const HeaderMain = ({ isHome = false, menuName = "메뉴", onPressBell, showBorder = true }) => {
   const insets = useSafeAreaInsets();
 
   return (
     <View
-      className="border-b border-grayscale-G100 bg-white px-4"
+      className={`${showBorder ? "border-b border-grayscale-G100" : ""} bg-white px-4`}
       style={{ paddingTop: insets.top }}
     >
       <View className="h-[58px] flex-row items-center justify-between">

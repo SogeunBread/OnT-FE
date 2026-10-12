@@ -60,6 +60,7 @@ const MealCard = ({
   titleClassName = "",
   timeClassName = "",
   badgeClassName = "",
+  badgeStyle,
   badgeTextClassName = "",
   thumbnailClassName = "",
   onPress,
@@ -100,6 +101,7 @@ const MealCard = ({
 
         {hasBadge ? (
           <View
+            style={badgeStyle}
             className={`self-start rounded-full px-2 py-1 ${feedbackVariant.badgeClassName} ${badgeClassName}`}
           >
             <View className="flex-row items-center gap-2">
