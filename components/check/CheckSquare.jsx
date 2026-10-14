@@ -25,6 +25,7 @@ const CheckSquare = ({
   onChange,
   className = "",
   boxClassName = "",
+  boxStyle,
   labelClassName = "",
   children,
   disabled,
@@ -62,6 +63,7 @@ const CheckSquare = ({
       disabled={disabled}
     >
       <View
+        style={boxStyle}
         className={`size-[24px] items-center justify-center rounded-[4px] border ${currentStyle.box} ${boxClassName}`}
       >
         <View className="relative">

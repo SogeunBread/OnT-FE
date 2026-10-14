@@ -8,6 +8,7 @@ import MealDateTimeField from "@/components/meal-record/MealDateTimeField";
 import MealPhotoField from "@/components/meal-record/MealPhotoField";
 import { useMealRecords } from "@/components/meal-record/MealRecordsContext";
 import { canRecordMealOnDate } from "@/components/meal-record/meal-record-date";
+import { colors } from "@/tailwind.config";
 import { endOfDay, format, parseISO } from "date-fns";
 import { Redirect, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useMemo, useRef, useState } from "react";
@@ -23,6 +24,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const MAX_PHOTO_COUNT = 4;
 const MAX_CONTENT_LENGTH = 200;
+const LOCKED_FEEDBACK_BOX_STYLE = {
+  backgroundColor: colors.primary[100],
+  borderColor: colors.primary[100],
+};
 
 const formatCurrentTime = () => format(new Date(), "HH:mm");
 
@@ -54,6 +59,8 @@ const MealRecordForm = ({ selectedDate, initialTime, initialRecord, hasMatchedTr
   const [mealContent, setMealContent] = useState("");
   const [photos, setPhotos] = useState([]);
   const [feedbackRequested, setFeedbackRequested] = useState(false);
+  const feedbackLocked = Boolean(initialRecord?.feedbackRequested);
+  const isFeedbackRequested = feedbackLocked || feedbackRequested;
   const retainedPhotoUris = useMemo(() => initialRecord?.photos.map(({ uri }) => uri) ?? [], [initialRecord]);
   const submitted = useRef(false);
   const [mealDateTime, setMealDateTime] = useState(() => {
@@ -120,7 +127,7 @@ const MealRecordForm = ({ selectedDate, initialTime, initialRecord, hasMatchedTr
       mealContent: mealContent.trim(),
       photos,
       hasMatchedTrainer,
-      feedbackRequested,
+      feedbackRequested: isFeedbackRequested,
     });
     if (result === false) submitted.current = false;
   };
@@ -213,18 +220,21 @@ const MealRecordForm = ({ selectedDate, initialTime, initialRecord, hasMatchedTr
           {hasMatchedTrainer && (
             <CheckSquare
               accessibilityLabel="트레이너 피드백 요청"
-              accessibilityState={{ checked: feedbackRequested }}
-              aria-checked={feedbackRequested}
+              accessibilityState={{ checked: isFeedbackRequested, disabled: feedbackLocked }}
+              aria-checked={isFeedbackRequested}
               className="w-full gap-4 py-2"
-              checked={feedbackRequested}
-              onChange={setFeedbackRequested}
+              style={feedbackLocked ? { opacity: 1 } : undefined}
+              boxStyle={feedbackLocked ? LOCKED_FEEDBACK_BOX_STYLE : undefined}
+              checked={isFeedbackRequested}
+              disabled={feedbackLocked}
+              onChange={feedbackLocked ? undefined : setFeedbackRequested}
             >
               <View className="min-w-0 flex-1">
-                <Text className="text-14 font-pretendard-semibold text-text">
+                <Text className={`text-14 font-pretendard-semibold ${feedbackLocked ? "text-grayscale-G400" : "text-text"}`}>
                   트레이너 피드백 요청
                 </Text>
-                <Text className="text-12 font-pretendard-regular text-grayscale-G500">
-                  트레이너에게 식단 조언을 받습니다.
+                <Text className={`text-12 font-pretendard-regular ${feedbackLocked ? "text-grayscale-G300" : "text-grayscale-G500"}`}>
+                  {feedbackLocked ? "이미 요청한 피드백은 번복할 수 없습니다." : "트레이너에게 식단 조언을 받습니다."}
                 </Text>
               </View>
             </CheckSquare>

@@ -82,7 +82,12 @@ export function MealRecordsProvider({ children }) {
   const updateRecord = useCallback((id, draft) => {
     const previous = records.find((record) => record.id === id);
     if (!previous || previous.feedback === MEAL_CARD_FEEDBACK.DONE || !canRecordMealOnDate(draft.date)) return null;
-    const record = { ...previous, ...draft, id, photos: savePhotos(draft.photos), feedback: feedbackForDraft(draft) };
+    const nextDraft = {
+      ...draft,
+      hasMatchedTrainer: previous.hasMatchedTrainer,
+      feedbackRequested: Boolean(previous.feedbackRequested || draft.feedbackRequested),
+    };
+    const record = { ...previous, ...nextDraft, id, photos: savePhotos(nextDraft.photos), feedback: feedbackForDraft(nextDraft) };
     previous.photos.forEach(({ uri }) => {
       if (!record.photos.some((photo) => photo.uri === uri) && photoUrls.current.delete(uri)) URL.revokeObjectURL(uri);
     });
