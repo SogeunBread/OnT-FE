@@ -67,13 +67,17 @@ export default function MealRecordDetailSheet({ record, onClose, onDelete, onEdi
         )}
         {confirmDelete && (
           <Modal transparent animationType="fade" onRequestClose={() => setConfirmDelete(false)}>
-            <View className="flex-1 items-center justify-center bg-black/40 px-4" accessibilityViewIsModal>
+            <View
+              className="flex-1 items-center justify-center px-4"
+              style={{ backgroundColor: "rgba(17,17,17,0.2)" }}
+              accessibilityViewIsModal
+            >
               <ConfirmModal
                 style={{ width: "100%", maxWidth: 358 }}
-                title="식단 기록을 삭제할까요?"
-                content="삭제한 기록은 복구할 수 없어요."
-                leftButtonText="취소"
-                rightButtonText="삭제"
+                title={record.title}
+                content="해당 식사를 삭제할까요?"
+                leftButtonText="아니오"
+                rightButtonText="삭제하기"
                 onLeftPress={() => setConfirmDelete(false)}
                 onRightPress={() => { onDelete(record.id); onClose(); }}
               />
