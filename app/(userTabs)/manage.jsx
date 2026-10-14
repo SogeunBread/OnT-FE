@@ -95,9 +95,9 @@ export default function UserManageTab() {
         </View>
 
         <View className="gap-4 px-4 pt-4">
-          {isFutureDate ? (
+          {isFutureDate || dailyRecords.length === 0 ? (
             <Text className="text-center text-12 font-pretendard-semibold text-grayscale-G400">
-              미래 식사는 기록할 수 없어요.
+              {isFutureDate ? "미래 식사는 기록할 수 없어요." : "등록된 식사 기록이 없어요."}
             </Text>
           ) : dailyRecords.map((record) => (
             <MealCard
