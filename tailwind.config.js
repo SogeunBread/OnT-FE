@@ -16,6 +16,7 @@ const colors = {
     yellow: "#FFC74D",
   },
   grayscale: {
+    G50: "#F3F3F3",
     G900: "#292929",
     G800: "#414141",
     G700: "#595959",

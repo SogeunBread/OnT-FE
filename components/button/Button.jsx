@@ -53,6 +53,7 @@ const Button = ({
   variant = "weak",
   disabled = false,
   className = "",
+  textClassName = "text-16",
   style,
   ...props
 }) => {
@@ -60,7 +61,10 @@ const Button = ({
   const currentVariant = typeof style === "string" ? style : variant;
   const pressableStyle = typeof style === "string" ? undefined : style;
   const currentStyle =
-    BUTTON_STYLES[currentVariant]?.[currentState] ?? BUTTON_STYLES.weak.default;
+    disabled || state === "disabled"
+      ? BUTTON_STYLES.disabled.disabled
+      : BUTTON_STYLES[currentVariant]?.[currentState] ??
+        BUTTON_STYLES.weak.default;
 
   const { backgroundColor, textColor, fontWeight } = currentStyle;
 
@@ -72,7 +76,7 @@ const Button = ({
       style={[{ backgroundColor: backgroundColor }, pressableStyle]}
     >
       <Text
-        className="text-16 font-pretendard-semibold"
+        className={`${textClassName} font-pretendard-semibold`}
         style={{
           fontWeight: fontWeight,
           color: textColor,

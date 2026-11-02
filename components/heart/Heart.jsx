@@ -10,6 +10,7 @@ const Heart = ({
   className = "",
   iconClassName = "",
   size = 24,
+  inactiveIcon,
   activeColor = "#FF795E", // 여기엔 문자열 색상값만 받기 때문에 색상 코드로 둠
   inactiveColor = "#111111",
   hitSlop = 10,
@@ -26,7 +27,7 @@ const Heart = ({
     onChange?.(next);
   };
 
-  const Icon = isLiked ? HeartFilled : HeartOutline;
+  const Icon = isLiked ? HeartFilled : inactiveIcon ?? HeartOutline;
   const iconColor = isLiked ? activeColor : inactiveColor;
 
   return (
@@ -40,7 +41,11 @@ const Heart = ({
       accessibilityState={{ selected: isLiked }}
     >
       <View className={iconClassName}>
-        <Icon width={size} height={size} color={iconColor} />
+        {!isLiked && inactiveIcon ? (
+          <Icon />
+        ) : (
+          <Icon width={size} height={size} color={iconColor} />
+        )}
       </View>
     </Pressable>
   );
