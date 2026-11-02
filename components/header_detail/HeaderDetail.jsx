@@ -1,6 +1,8 @@
 import Heart from "@/components/heart/Heart";
-import CompareIcon from "@/components/icons/Compare";
-import LeftIcon from "@/components/icons/Left";
+import CompareIcon from "@/assets/figma/compare.svg";
+import HeartIcon from "@/assets/figma/heart.svg";
+import ButtonSmall from "@/components/button/ButtonSmall";
+import LeftIcon from "@/assets/figma/left.svg";
 import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,6 +17,9 @@ const HeaderDetail = ({
   onPressBack,
   onPressCompare,
   compareLabel = "비교함 담기",
+  buttonLabel = "관리",
+  onPressAction,
+  includeSafeArea = true,
 }) => {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -34,7 +39,7 @@ const HeaderDetail = ({
   return (
     <View
       className="border-b border-grayscale-G100 bg-white px-4"
-      style={{ paddingTop: insets.top }}
+      style={{ paddingTop: includeSafeArea ? insets.top : 0 }}
     >
       <View className="h-[70px] flex-row items-center gap-6">
         <Pressable
@@ -47,7 +52,7 @@ const HeaderDetail = ({
           <LeftIcon />
         </Pressable>
 
-        <View className="flex-1">
+        <View className="min-w-0 flex-1">
           <Text
             className="text-18 font-pretendard-bold text-text"
             numberOfLines={1}
@@ -67,11 +72,20 @@ const HeaderDetail = ({
         {showHeart ? (
           <Heart
             className="m-auto"
+            inactiveIcon={HeartIcon}
             liked={liked}
             defaultLiked={defaultLiked}
             onChange={onHeartChange}
           />
         ) : null}
+
+        {actionType === "button" && (
+          <ButtonSmall
+            text={buttonLabel}
+            onPress={onPressAction}
+            accessibilityRole="button"
+          />
+        )}
 
         {showCompare ? (
           <Pressable
@@ -81,7 +95,7 @@ const HeaderDetail = ({
             hitSlop={8}
             onPress={onPressCompare}
           >
-            <CompareIcon color="#62B1FF" size={16} />
+            <CompareIcon />
             <Text className="text-12 font-pretendard-semibold text-secondary-blue">
               {compareLabel}
             </Text>
