@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ExerciseComponentsPreview from "@/components/preview/ExerciseComponentsPreview";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Pressable, ScrollView, Text, View } from "react-native";
@@ -99,6 +100,7 @@ export default function ComponentPreview() {
             </Text>
           </View>
         </View>
+        <ExerciseComponentsPreview onNotify={notify} />
         <Section title="chat · 텍스트/사진 × 나/상대">
           <View className="gap-5 bg-white p-0">
             <Chat writer="me" />

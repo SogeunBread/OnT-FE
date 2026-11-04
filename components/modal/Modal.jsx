@@ -11,6 +11,11 @@ const Modal = ({
   rightButtonText = "button",
   onLeftPress = () => {},
   onRightPress = () => {},
+  icon,
+  className = "",
+  leftButtonVariant = "weak",
+  buttonsDisabled = false,
+  ...viewProps
 }) => {
   const hasTitle = typeof title === "string" && title.trim().length > 0;
   const hasContent = typeof content === "string" && content.trim().length > 0;
@@ -18,7 +23,11 @@ const Modal = ({
   const shouldShowContent = showContent ?? hasContent;
 
   return (
-    <View className="w-[358px] rounded-[12px] bg-white px-[12px] pt-[20px] pb-[12px] items-center gap-[16px]">
+    <View
+      {...viewProps}
+      className={`w-[358px] rounded-[12px] bg-white px-[12px] pt-[20px] pb-[12px] items-center gap-[16px] ${className}`}
+    >
+      {icon}
       {(shouldShowTitle || shouldShowContent) && (
         <View className="w-full items-center gap-[4px]">
           {shouldShowTitle && (
@@ -40,13 +49,21 @@ const Modal = ({
 
       <View className="w-full flex-row gap-[8px]">
         <View className="flex-1">
-          <Button text={leftButtonText} variant="weak" onPress={onLeftPress} />
+          <Button
+            text={leftButtonText}
+            variant={leftButtonVariant}
+            disabled={buttonsDisabled}
+            accessibilityRole="button"
+            onPress={onLeftPress}
+          />
         </View>
         <View className="flex-1">
           <Button
             text={rightButtonText}
             variant="fill"
             onPress={onRightPress}
+            disabled={buttonsDisabled}
+            accessibilityRole="button"
           />
         </View>
       </View>

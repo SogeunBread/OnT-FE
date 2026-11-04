@@ -11,6 +11,7 @@ const ChipArea = ({
   className = "",
   textClassName = "",
   closeClassName = "",
+  closeAccessibilityLabel = `${text} 선택 해제`,
   ...restProps
 }) => {
   const handleClose = (e) => {
@@ -22,7 +23,10 @@ const ChipArea = ({
     <Pressable
       {...restProps}
       onPress={onPress}
-      className={`self-start flex-row items-center gap-2 rounded-[20px] bg-primary-main px-2 py-1 ${disabled ? "opacity-60" : ""} ${className}`}
+      disabled={disabled}
+      className={`self-start flex-row items-center gap-2 rounded-[20px] bg-primary-main px-2 py-1 ${
+        disabled ? "opacity-60" : ""
+      } ${className}`}
     >
       <Text
         className={`text-xs font-pretendard-semibold leading-4 text-white ${textClassName}`}
@@ -31,6 +35,8 @@ const ChipArea = ({
       </Text>
 
       <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={closeAccessibilityLabel}
         disabled={disabled}
         onPress={handleClose}
         hitSlop={10}

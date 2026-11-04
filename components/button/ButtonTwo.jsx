@@ -5,6 +5,7 @@ const ButtonTwo = ({
   prevText = "이전",
   nextText = "다음",
   nextDisabled = false,
+  prevDisabled = false,
   onPrevPress,
   onNextPress,
 }) => {
@@ -15,6 +16,8 @@ const ButtonTwo = ({
           <Button
             state="default"
             variant="weak"
+            disabled={prevDisabled}
+            accessibilityRole="button"
             text={prevText}
             onPress={onPrevPress}
           />
@@ -25,6 +28,7 @@ const ButtonTwo = ({
             state={nextDisabled ? "disabled" : "default"}
             variant={nextDisabled ? "disabled" : "fill"}
             disabled={nextDisabled}
+            accessibilityRole="button"
             text={nextText}
             onPress={onNextPress}
           />
