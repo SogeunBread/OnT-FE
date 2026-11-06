@@ -36,7 +36,7 @@ const DEFAULT_EVENTS = [
 
 const getDateKey = (date) => format(date, "yyyy-MM-dd");
 
-const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, style }) => {
+const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, compact, style }) => {
   const weekStart = startOfWeek(periodDate, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(periodDate, { weekStartsOn: 1 });
   const title =
@@ -47,12 +47,15 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, style }) => {
       : format(periodDate, "yyyy년 M월");
 
   return (
-    <View className="mb-4 flex-row items-center justify-between" style={style}>
+    <View
+      className={`${compact ? "py-2" : "mb-4"} flex-row items-center justify-between`}
+      style={style}
+    >
       <Pressable
         accessibilityLabel={mode === "week" ? "이전 주" : "이전 달"}
         accessibilityRole="button"
-        className="h-10 w-10 items-center justify-center"
-        hitSlop={4}
+        className={`${compact ? "h-[42px] w-[18px]" : "h-10 w-10"} items-center justify-center`}
+        hitSlop={compact ? 12 : 4}
         onPress={onPrevious}
       >
         <LeftArrow size={18} color="#B7B7B7" strokeWidth={3} />
@@ -61,13 +64,15 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, style }) => {
       <View className="items-center">
         <Text
           className={`${
-            mode === "week" ? "text-18" : "text-16"
+            mode === "week" && !compact ? "text-18" : "text-16"
           } font-pretendard-semibold text-text`}
         >
           {title}
         </Text>
         {mode === "week" && (
-          <Text className="mt-1 text-14 font-pretendard-regular text-grayscale-G500">
+          <Text
+            className={`${compact ? "text-12" : "mt-1 text-14"} font-pretendard-regular text-grayscale-G500`}
+          >
             {format(weekStart, "M.d (EEE)", { locale: ko })} ~{" "}
             {format(weekEnd, "M.d (EEE)", { locale: ko })}
           </Text>
@@ -77,8 +82,8 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, style }) => {
       <Pressable
         accessibilityLabel={mode === "week" ? "다음 주" : "다음 달"}
         accessibilityRole="button"
-        className="h-10 w-10 items-center justify-center"
-        hitSlop={4}
+        className={`${compact ? "h-[42px] w-[18px]" : "h-10 w-10"} items-center justify-center`}
+        hitSlop={compact ? 12 : 4}
         onPress={onNext}
       >
         <RightArrow size={18} color="#B7B7B7" strokeWidth={3} />
@@ -110,6 +115,8 @@ const CalendarDay = ({
   isCurrentMonth = true,
   isSelected,
   mode,
+  compact,
+  selectedTone,
   onPress,
 }) => {
   const isTodayDate = isToday(date);
@@ -121,7 +128,7 @@ const CalendarDay = ({
     ? "text-text"
     : "text-grayscale-G300";
   const backgroundColor = isSelected
-    ? isTodayDate
+    ? isTodayDate || selectedTone === "primary"
       ? "bg-primary-main"
       : "bg-grayscale-G300"
     : "bg-transparent";
@@ -138,11 +145,11 @@ const CalendarDay = ({
       accessibilityRole="button"
       accessibilityState={{ selected: isSelected }}
       className={`${
-        mode === "week" ? "h-[72px]" : "h-[52px]"
+        mode === "week" && !compact ? "h-[72px]" : "h-[52px]"
       } flex-1 items-center gap-1 py-1`}
       onPress={onPress}
     >
-      {mode === "week" && (
+      {mode === "week" && !compact && (
         <Text className="text-12 font-pretendard-regular text-grayscale-G700">
           {WEEKDAYS[(date.getDay() + 6) % 7]}
         </Text>
@@ -164,9 +171,12 @@ const Calendar = ({
   events = DEFAULT_EVENTS,
   mode = "month",
   onDateSelect,
+  onPeriodChange,
   selectedDate: controlledSelectedDate,
   headerStyle,
   rowStyle,
+  compact = false,
+  selectedTone = "default",
 }) => {
   const [periodDate, setPeriodDate] = useState(
     controlledSelectedDate || defaultSelectedDate,
@@ -208,12 +218,11 @@ const Calendar = ({
   };
 
   const movePeriod = (direction) => {
-    setPeriodDate((date) => {
-      if (isWeekMode) {
-        return direction === "next" ? addWeeks(date, 1) : subWeeks(date, 1);
-      }
-      return direction === "next" ? addMonths(date, 1) : subMonths(date, 1);
-    });
+    const nextDate = isWeekMode
+      ? direction === "next" ? addWeeks(periodDate, 1) : subWeeks(periodDate, 1)
+      : direction === "next" ? addMonths(periodDate, 1) : subMonths(periodDate, 1);
+    setPeriodDate(nextDate);
+    onPeriodChange?.(nextDate);
   };
 
   const renderDay = (date, isCurrentMonth = true) => (
@@ -224,24 +233,46 @@ const Calendar = ({
       isCurrentMonth={isCurrentMonth}
       isSelected={isSameDay(date, selectedDate)}
       mode={mode}
+      compact={compact}
+      selectedTone={selectedTone}
       onPress={() => selectDate(date)}
     />
   );
 
   return (
-    <View className="w-full bg-white px-4 pb-3 pt-5">
+    <View
+      className={`w-full bg-white px-4 ${compact ? "border-b border-grayscale-G100" : "pb-3 pt-5"}`}
+    >
       <CalendarHeader
         mode={mode}
         periodDate={periodDate}
         onPrevious={() => movePeriod("previous")}
         onNext={() => movePeriod("next")}
         style={headerStyle}
+        compact={compact}
       />
 
       {isWeekMode ? (
-        <View className="flex-row items-center border-b border-b-grayscale-G100" style={rowStyle}>
-          {weekDays.map((date) => renderDay(date))}
-        </View>
+        <>
+          {compact && (
+            <View className="flex-row items-center gap-1.5 py-1">
+              {WEEKDAYS.map((day) => (
+                <Text
+                  key={day}
+                  className="flex-1 text-center text-12 font-pretendard-regular text-grayscale-G700"
+                >
+                  {day}
+                </Text>
+              ))}
+            </View>
+          )}
+          <View
+            className={`flex-row items-center ${compact ? "gap-1.5" : "border-b border-b-grayscale-G100"}`}
+            style={rowStyle}
+          >
+            {weekDays.map((date) => renderDay(date))}
+          </View>
+        </>
       ) : (
         <View>
           <View className="flex-row items-center border-b border-b-grayscale-G100 py-1" style={rowStyle}>
