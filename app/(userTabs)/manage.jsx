@@ -16,7 +16,7 @@ const BADGE_STYLES = {
 };
 
 const TAB_STYLE = { flex: 1, height: 45, paddingVertical: 0, justifyContent: "center" };
-const CARD_STYLE = { width: "100%", minHeight: 96, boxShadow: "0px 0px 2px rgba(0,0,0,0.1)" };
+const CARD_STYLE = { width: "100%", boxShadow: "0px 0px 2px rgba(0,0,0,0.1)" };
 
 export default function UserManageTab() {
   const router = useRouter();
