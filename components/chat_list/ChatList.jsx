@@ -7,6 +7,7 @@ export default function ChatList({
   time = "00:00",
   unreadCount = 1,
   avatarSource,
+  avatarContainerClassName = "",
   onPress,
   className = "",
 }) {
@@ -19,18 +20,20 @@ export default function ChatList({
       onPress={onPress}
       className={`w-full flex-row items-center gap-3 border-b border-grayscale-G50 bg-white px-4 py-3 ${className}`}
     >
-      {avatarSource ? (
-        <Image
-          source={
-            typeof avatarSource === "string"
-              ? { uri: avatarSource }
-              : avatarSource
-          }
-          className="h-[52px] w-[52px] rounded-full"
-        />
-      ) : (
-        <Avatar />
-      )}
+      <View className={`h-[52px] w-[52px] shrink-0 ${avatarContainerClassName}`}>
+        {avatarSource ? (
+          <Image
+            source={
+              typeof avatarSource === "string"
+                ? { uri: avatarSource }
+                : avatarSource
+            }
+            className="h-[52px] w-[52px] rounded-full"
+          />
+        ) : (
+          <Avatar />
+        )}
+      </View>
       <View className="min-w-0 flex-1">
         <Text
           numberOfLines={1}

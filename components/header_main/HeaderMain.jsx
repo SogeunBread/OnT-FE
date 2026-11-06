@@ -4,17 +4,27 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const LOGO_BOX_WIDTH = 46;
 
-const HeaderMain = ({ isHome = false, menuName = "메뉴", onPressBell, showBorder = true }) => {
+const HeaderMain = ({
+  isHome = false,
+  menuName = "메뉴",
+  onPressBell,
+  showBorder = true,
+  logoStyle,
+  className = "",
+}) => {
   const insets = useSafeAreaInsets();
 
   return (
     <View
-      className={`${showBorder ? "border-b border-grayscale-G100" : ""} bg-white px-4`}
+      className={`${showBorder ? "border-b border-grayscale-G100" : ""} bg-white px-4 ${className}`}
       style={{ paddingTop: insets.top }}
     >
       <View className="h-[58px] flex-row items-center justify-between">
         {isHome ? (
-          <View className="w-[46px] items-center justify-center bg-grayscale-G800 px-2 py-2">
+          <View
+            className="w-[46px] items-center justify-center bg-grayscale-G800 px-2 py-2"
+            style={logoStyle}
+          >
             <Text className="text-12 font-pretendard-semibold text-white">
               로고
             </Text>

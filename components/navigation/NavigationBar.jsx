@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import TabItem from "./TabItem";
 
-const NavigationBar = ({ state, navigation, tabs }) => {
+const NavigationBar = ({ state, navigation, tabs, labelClassName }) => {
   const insets = useSafeAreaInsets();
   const HOME_INDICATOR_HEIGHT = Math.max(insets.bottom, 34);
   const tabMap = Object.fromEntries(tabs.map((tab) => [tab.name, tab]));
@@ -45,6 +45,7 @@ const NavigationBar = ({ state, navigation, tabs }) => {
               active={isFocused}
               onPress={onPress}
               onLongPress={onLongPress}
+              labelClassName={labelClassName}
             />
           );
         })}
