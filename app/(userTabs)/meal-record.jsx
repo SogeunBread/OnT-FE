@@ -16,9 +16,10 @@ import {
   useLocalSearchParams,
   useRouter,
 } from "expo-router";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   BackHandler,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -77,6 +78,8 @@ const MealRecordForm = ({
     [initialRecord],
   );
   const submitted = useRef(false);
+  const scrollView = useRef(null);
+  const mealContentFocused = useRef(false);
   const [mealDateTime, setMealDateTime] = useState(() => {
     const initialValue = parseISO(`${selectedDate}T${initialTime}`);
     return canRecordMealOnDate(initialValue) ? initialValue : new Date();
@@ -88,6 +91,30 @@ const MealRecordForm = ({
       params: { date: selectedDate },
     });
   }, [router, selectedDate]);
+
+  const revealMealContent = useCallback(() => {
+    if (
+      Platform.OS === "web" ||
+      !mealContentFocused.current ||
+      !Keyboard.isVisible()
+    )
+      return;
+    scrollView.current?.scrollToEnd({ animated: true });
+  }, []);
+
+  useEffect(() => {
+    if (Platform.OS === "web") return;
+    const subscription = Keyboard.addListener(
+      "keyboardDidShow",
+      revealMealContent,
+    );
+    return () => subscription.remove();
+  }, [revealMealContent]);
+
+  const handleMealContentFocus = () => {
+    mealContentFocused.current = true;
+    revealMealContent();
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -177,14 +204,16 @@ const MealRecordForm = ({
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
+          ref={scrollView}
           className="flex-1"
+          onLayout={revealMealContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             gap: 16,
             paddingHorizontal: 16,
             paddingTop: 12,
-            paddingBottom: hasMatchedTrainer ? 184 : 130,
+            paddingBottom: 16,
           }}
         >
           <View className="w-full gap-2">
@@ -241,12 +270,16 @@ const MealRecordForm = ({
               placeholder="식사 내용, 칼로리, 느낀 점 등을 기록"
               value={mealContent}
               onChangeText={setMealContent}
+              onFocus={handleMealContentFocus}
+              onBlur={() => {
+                mealContentFocused.current = false;
+              }}
             />
           </View>
         </ScrollView>
 
         <View
-          className={`absolute bottom-0 left-0 right-0 bg-white px-4 ${
+          className={`bg-white px-4 ${
             hasMatchedTrainer
               ? "gap-2.5 border-t border-grayscale-G100 pt-1"
               : "pt-3"
