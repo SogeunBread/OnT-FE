@@ -18,7 +18,12 @@ import Chat from "@/components/chat";
 import ChatMeal from "@/components/chat_meal";
 import ChatPT from "@/components/chat_pt";
 import ReviewList from "@/components/review_list";
+import Calendar from "@/components/calendar";
+import PTScheduleCard from "@/components/pt_schedule_card";
 import { chatPreview } from "@/constants/componentPreview";
+import { TRAINER_HOME_INITIAL_DATE, trainerHomeSchedules } from "@/constants/trainerHome";
+import { trainerConsultationRequests } from "@/constants/trainerConsultationRequests";
+import { parseISO } from "date-fns";
 
 const WORKOUT_TYPES = ["type-one", "type-two", "type-three", "no-type"];
 
@@ -218,6 +223,14 @@ export default function ComponentPreview() {
             unreadCount={0}
             onPress={() => notify("읽은 채팅방 선택")}
           />
+          <ChatList
+            name={`${trainerConsultationRequests[0].memberName} 회원`}
+            message={trainerConsultationRequests[0].message}
+            time={trainerConsultationRequests[0].time}
+            unreadCount={trainerConsultationRequests[0].unreadCount}
+            avatarContainerClassName="overflow-hidden rounded-full"
+            onPress={() => notify("신규 상담 요청 선택")}
+          />
         </Section>
         <Section title="list · 이동 / 토글" fullWidth>
           <List onPress={() => notify("메뉴 선택")} />
@@ -230,8 +243,24 @@ export default function ComponentPreview() {
             }}
           />
         </Section>
-        <Section title="tag">
+        <Section title="tag · outline / filled">
           <Tag text="근력증가" />
+          <Tag text="PT" variant="filled" />
+        </Section>
+        <Section title="트레이너 홈 · 주간 달력 / PT 일정" fullWidth>
+          <Calendar
+            compact
+            mode="week"
+            selectedTone="primary"
+            defaultSelectedDate={parseISO(TRAINER_HOME_INITIAL_DATE)}
+            events={trainerHomeSchedules.map(({ date }) => ({ date }))}
+            onDateSelect={() => notify("PT 일정 날짜 선택")}
+          />
+          <View className="gap-4 px-4">
+            {trainerHomeSchedules.slice(0, 2).map((schedule) => (
+              <PTScheduleCard key={schedule.id} {...schedule} />
+            ))}
+          </View>
         </Section>
         <Section title="header-detail · 3가지 변형" fullWidth>
           {["heart", "compare", "button"].map((actionType) => (
