@@ -36,7 +36,7 @@ const DEFAULT_EVENTS = [
 
 const getDateKey = (date) => format(date, "yyyy-MM-dd");
 
-const CalendarHeader = ({ mode, periodDate, onPrevious, onNext }) => {
+const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, style }) => {
   const weekStart = startOfWeek(periodDate, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(periodDate, { weekStartsOn: 1 });
   const title =
@@ -47,7 +47,7 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext }) => {
       : format(periodDate, "yyyy년 M월");
 
   return (
-    <View className="mb-4 flex-row items-center justify-between">
+    <View className="mb-4 flex-row items-center justify-between" style={style}>
       <Pressable
         accessibilityLabel={mode === "week" ? "이전 주" : "이전 달"}
         accessibilityRole="button"
@@ -165,6 +165,8 @@ const Calendar = ({
   mode = "month",
   onDateSelect,
   selectedDate: controlledSelectedDate,
+  headerStyle,
+  rowStyle,
 }) => {
   const [periodDate, setPeriodDate] = useState(
     controlledSelectedDate || defaultSelectedDate,
@@ -233,15 +235,16 @@ const Calendar = ({
         periodDate={periodDate}
         onPrevious={() => movePeriod("previous")}
         onNext={() => movePeriod("next")}
+        style={headerStyle}
       />
 
       {isWeekMode ? (
-        <View className="flex-row items-center border-b border-b-grayscale-G100">
+        <View className="flex-row items-center border-b border-b-grayscale-G100" style={rowStyle}>
           {weekDays.map((date) => renderDay(date))}
         </View>
       ) : (
         <View>
-          <View className="flex-row items-center border-b border-b-grayscale-G100 py-1">
+          <View className="flex-row items-center border-b border-b-grayscale-G100 py-1" style={rowStyle}>
             {WEEKDAYS.map((day) => (
               <Text
                 key={day}
@@ -256,6 +259,7 @@ const Calendar = ({
             <View
               key={dates[0].toISOString()}
               className="flex-row items-center border-b border-b-grayscale-G100"
+              style={rowStyle}
             >
               {dates.map((date) =>
                 renderDay(date, isSameMonth(date, periodDate)),
