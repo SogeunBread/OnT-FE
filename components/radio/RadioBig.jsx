@@ -11,6 +11,7 @@ const RadioBig = ({
   disabled = false,
   className = "",
   titleClassName = "",
+  titleNumberOfLines = 1,
   subtitleClassName = "",
   radioClassName = "",
   hitSlop = 6,
@@ -42,7 +43,7 @@ const RadioBig = ({
       {/* 좌측 텍스트 */}
       <View className="flex-1">
         <Text
-          numberOfLines={1}
+          numberOfLines={titleNumberOfLines}
           className={`text-14 font-pretendard-semibold text-text ${titleClassName}`}
         >
           {title}
