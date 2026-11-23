@@ -1,10 +1,16 @@
-import { Text, View } from "react-native";
+import ProfileView from "@/components/trainer-profile/ProfileView";
+import { useTrainerProfile } from "@/components/trainer-profile/TrainerProfileContext";
+import { useRouter } from "expo-router";
+import { Linking } from "react-native";
 
 export default function ProfileTab() {
+  const router = useRouter();
+  const { profile } = useTrainerProfile();
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-20 font-pretendard-semibold text-text">프로필</Text>
-    </View>
+    <ProfileView profile={profile}
+      onEdit={() => router.push("/(trainer)/profile-edit")}
+      onReviews={() => router.push("/(trainer)/profile-reviews")}
+      onPressMap={(location) => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([location.name, location.address].join(" "))}`)} />
   );
 }
 

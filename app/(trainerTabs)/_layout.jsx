@@ -18,7 +18,7 @@ export default function TrainerTabsLayout() {
           return (
             <HeaderMain
               isHome={route.name === "home"}
-              menuName={currentTab?.label ?? "메뉴"}
+              menuName={route.name === "profile" ? "트레이너 프로필" : currentTab?.label ?? "메뉴"}
               logoStyle={{ width: 37 }}
               className={route.name === "home" ? "border-grayscale-G50" : ""}
             />
