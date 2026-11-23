@@ -28,7 +28,7 @@ export default function TrainerTabsLayout() {
       }}
     >
       {trainerTabs.map(({ name }) => (
-        <Tabs.Screen key={name} name={name} />
+        <Tabs.Screen key={name} name={name} options={name === "chat" ? { headerShown: false } : {}} />
       ))}
     </Tabs>
   );

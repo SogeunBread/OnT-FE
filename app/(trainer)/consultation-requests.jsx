@@ -2,6 +2,7 @@ import ChatList from "@/components/chat_list";
 import FieldSearch from "@/components/field/FieldSearch";
 import HeaderDetail from "@/components/header_detail";
 import { trainerConsultationRequests } from "@/constants/trainerConsultationRequests";
+import { useTrainerChat } from "@/features/trainer-chat/TrainerChatProvider";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -18,10 +19,12 @@ export default function TrainerConsultationRequestsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState("");
+  const { rooms } = useTrainerChat();
   const searchQuery = query.trim().toLocaleLowerCase();
-  const requests = trainerConsultationRequests.filter((request) =>
-    request.memberName.toLocaleLowerCase().includes(searchQuery),
-  );
+  const requests = trainerConsultationRequests
+    .filter((request) => rooms.some((room) => room.id === request.id && room.requestStatus === "pending"))
+    .map((request) => ({ ...request, unreadCount: rooms.find((room) => room.id === request.id)?.unreadCount ?? 0 }))
+    .filter((request) => request.memberName.toLocaleLowerCase().includes(searchQuery));
 
   const handlePressBack = () => {
     Keyboard.dismiss();
@@ -34,10 +37,9 @@ export default function TrainerConsultationRequestsScreen() {
 
   const handlePressRequest = (request) => {
     Keyboard.dismiss();
-    // 상세 채팅 화면 연동 시 이 진입점의 요청 식별자를 사용합니다.
     router.push({
-      pathname: "/(trainerTabs)/chat",
-      params: { requestId: request.id },
+      pathname: "/(trainer)/chat/[id]",
+      params: { id: request.id },
     });
   };
 

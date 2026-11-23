@@ -2,6 +2,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import TrainerChatProvider from "@/features/trainer-chat/TrainerChatProvider";
 import "../global.css";
 
 export default function RootLayout() {
@@ -20,13 +21,15 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(userTabs)" />
-        <Stack.Screen name="(trainerTabs)" />
-        <Stack.Screen name="(trainer)" />
-        <Stack.Screen name="component-preview" />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
+      <TrainerChatProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(userTabs)" />
+          <Stack.Screen name="(trainerTabs)" />
+          <Stack.Screen name="(trainer)" />
+          <Stack.Screen name="component-preview" />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </TrainerChatProvider>
     </GestureHandlerRootView>
   );
 }
