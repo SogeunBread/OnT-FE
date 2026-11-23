@@ -20,6 +20,7 @@ const HeaderDetail = ({
   buttonLabel = "관리",
   onPressAction,
   includeSafeArea = true,
+  showBorder = true,
 }) => {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -38,7 +39,7 @@ const HeaderDetail = ({
 
   return (
     <View
-      className="border-b border-grayscale-G100 bg-white px-4"
+      className={`${showBorder ? "border-b border-grayscale-G100" : ""} bg-white px-4`}
       style={{ paddingTop: includeSafeArea ? insets.top : 0 }}
     >
       <View className="h-[70px] flex-row items-center gap-6">
