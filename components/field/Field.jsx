@@ -17,6 +17,7 @@ const Field = ({
   icon = false,
   state,
   style,
+  inputComponent: Input = TextInput,
   ...restProps
 }) => {
   const isControlled = typeof value === "string";
@@ -33,7 +34,7 @@ const Field = ({
       } ${isDisabled ? "bg-grayscale-G50" : "bg-white"} ${className}`}
     >
       {icon && <SearchIcon />}
-      <TextInput
+      <Input
         {...restProps}
         value={inputValue}
         onChangeText={(text) => {

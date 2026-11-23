@@ -29,6 +29,7 @@ const CheckSquare = ({
   labelClassName = "",
   children,
   disabled,
+  checkIcon: CustomCheckIcon,
   ...restProps
 }) => {
   const isControlled = typeof checked === "boolean";
@@ -60,6 +61,8 @@ const CheckSquare = ({
         currentStyle.container ?? ""
       } ${className}`}
       accessibilityRole="checkbox"
+      accessibilityState={{ checked: isChecked, disabled: !!disabled }}
+      aria-checked={isChecked}
       disabled={disabled}
     >
       <View
@@ -67,7 +70,11 @@ const CheckSquare = ({
         className={`size-[24px] items-center justify-center rounded-[4px] border ${currentStyle.box} ${boxClassName}`}
       >
         <View className="relative">
-          <CheckIcon size={16} color="white" />
+          {CustomCheckIcon ? (
+            <CustomCheckIcon />
+          ) : (
+            <CheckIcon size={16} color="white" />
+          )}
         </View>
       </View>
 

@@ -20,6 +20,7 @@ export default function WorkoutCard({
   defaultDuration = "00:00:00",
   onDurationChange,
   onDelete,
+  disabled = false,
   className = "",
 }) {
   const count = COLUMN_COUNTS[variant] ?? 1;
@@ -63,6 +64,7 @@ export default function WorkoutCard({
           accessibilityRole="button"
           accessibilityLabel={`${title} 삭제`}
           onPress={onDelete}
+          disabled={disabled}
           hitSlop={8}
         >
           <Delete />
@@ -70,6 +72,7 @@ export default function WorkoutCard({
       </View>
       {variant === "no-type" ? (
         <Field
+          disabled={disabled}
           value={duration ?? internalDuration}
           accessibilityLabel={`${title} 운동 시간`}
           inputClassName="text-right"
@@ -108,6 +111,7 @@ export default function WorkoutCard({
               <View className="min-w-0 flex-1 flex-row gap-2.5">
                 {Array.from({ length: count }, (_, column) => (
                   <Field
+                    disabled={disabled}
                     key={column}
                     className="w-auto min-w-0 flex-1"
                     inputClassName="text-right"
@@ -129,11 +133,12 @@ export default function WorkoutCard({
               variant="weakDark"
               className="flex-1"
               accessibilityRole="button"
-              disabled={rows.length === 0}
+              disabled={disabled || rows.length === 0}
               onPress={() => update(rows.slice(0, -1))}
             />
             <Button
               text="세트 추가"
+              disabled={disabled}
               className="flex-1"
               accessibilityRole="button"
               onPress={() => update([...rows, Array(count).fill("0")])}
