@@ -23,7 +23,11 @@ export default function UserTabsLayout() {
       }}
     >
       {userTabs.map(({ name }) => (
-        <Tabs.Screen key={name} name={name} />
+        <Tabs.Screen
+          key={name}
+          name={name}
+          options={name === "exercise" ? { headerShown: false } : undefined}
+        />
       ))}
 
       <Tabs.Screen

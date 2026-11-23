@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Text, View } from "react-native";
 import "../global.css";
+import { ExerciseProvider } from "@/features/exercise/ExerciseProvider";
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -20,12 +21,15 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(userTabs)" />
-        <Stack.Screen name="(trainerTabs)" />
-        <Stack.Screen name="component-preview" />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
+      <ExerciseProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(userTabs)" />
+          <Stack.Screen name="(trainerTabs)" />
+          <Stack.Screen name="(exerciseFlow)" />
+          <Stack.Screen name="component-preview" />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </ExerciseProvider>
     </GestureHandlerRootView>
   );
 }

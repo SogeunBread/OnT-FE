@@ -18,6 +18,7 @@ export default function ExerciseDetailSheet({
   onEdit,
   onDelete,
   initialHeight,
+  children,
 }) {
   const edit = canEdit && !!onEdit;
   const remove = canDelete && type !== "pt" && !!onDelete;
@@ -71,7 +72,9 @@ export default function ExerciseDetailSheet({
         )
       }
     >
-      <ExerciseRecordList records={records} />
+      {(records.length > 0 || type !== "pt") && (
+        <ExerciseRecordList records={records} />
+      )}
       <View className="gap-2 border-t border-grayscale-G100 pt-4">
         <Text className="text-14 font-pretendard-semibold text-text">메모</Text>
         <Text
@@ -82,6 +85,7 @@ export default function ExerciseDetailSheet({
           {memo || "아직 작성된 메모가 없습니다."}
         </Text>
       </View>
+      {children}
     </Sheet>
   );
 }

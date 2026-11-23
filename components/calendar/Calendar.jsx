@@ -17,7 +17,7 @@ import {
   subWeeks,
 } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"];
@@ -36,7 +36,7 @@ const DEFAULT_EVENTS = [
 
 const getDateKey = (date) => format(date, "yyyy-MM-dd");
 
-const CalendarHeader = ({ mode, periodDate, onPrevious, onNext }) => {
+const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, compact }) => {
   const weekStart = startOfWeek(periodDate, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(periodDate, { weekStartsOn: 1 });
   const title =
@@ -47,7 +47,11 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext }) => {
       : format(periodDate, "yyyy년 M월");
 
   return (
-    <View className="mb-4 flex-row items-center justify-between">
+    <View
+      className={`${
+        compact ? "h-[58px]" : "mb-4"
+      } flex-row items-center justify-between`}
+    >
       <Pressable
         accessibilityLabel={mode === "week" ? "이전 주" : "이전 달"}
         accessibilityRole="button"
@@ -61,13 +65,17 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext }) => {
       <View className="items-center">
         <Text
           className={`${
-            mode === "week" ? "text-18" : "text-16"
+            mode === "week" && !compact ? "text-18" : "text-16"
           } font-pretendard-semibold text-text`}
         >
           {title}
         </Text>
         {mode === "week" && (
-          <Text className="mt-1 text-14 font-pretendard-regular text-grayscale-G500">
+          <Text
+            className={`${
+              compact ? "text-12" : "mt-1 text-14"
+            } font-pretendard-regular text-grayscale-G500`}
+          >
             {format(weekStart, "M.d (EEE)", { locale: ko })} ~{" "}
             {format(weekEnd, "M.d (EEE)", { locale: ko })}
           </Text>
@@ -87,7 +95,7 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext }) => {
   );
 };
 
-const EventDots = ({ events }) => {
+const EventDots = ({ events, eventDotClasses }) => {
   const eventTypes = [...new Set(events.map((event) => event.type || "meal"))];
 
   return (
@@ -96,7 +104,7 @@ const EventDots = ({ events }) => {
         <View
           key={type}
           className={`h-1 w-1 rounded-full ${
-            EVENT_DOT_CLASS[type] || EVENT_DOT_CLASS.meal
+            eventDotClasses[type] || EVENT_DOT_CLASS.meal
           }`}
         />
       ))}
@@ -111,6 +119,7 @@ const CalendarDay = ({
   isSelected,
   mode,
   onPress,
+  eventDotClasses,
 }) => {
   const isTodayDate = isToday(date);
   const textColor = isSelected
@@ -154,7 +163,7 @@ const CalendarDay = ({
           {format(date, "d")}
         </Text>
       </View>
-      <EventDots events={events} />
+      <EventDots events={events} eventDotClasses={eventDotClasses} />
     </Pressable>
   );
 };
@@ -165,15 +174,21 @@ const Calendar = ({
   mode = "month",
   onDateSelect,
   selectedDate: controlledSelectedDate,
+  eventDotClasses = EVENT_DOT_CLASS,
+  compact = false,
 }) => {
   const [periodDate, setPeriodDate] = useState(
-    controlledSelectedDate || defaultSelectedDate,
+    controlledSelectedDate || defaultSelectedDate
   );
-  const [internalSelectedDate, setInternalSelectedDate] = useState(
-    defaultSelectedDate,
-  );
+  const [internalSelectedDate, setInternalSelectedDate] =
+    useState(defaultSelectedDate);
   const selectedDate = controlledSelectedDate || internalSelectedDate;
   const isWeekMode = mode === "week";
+  const controlledTimestamp = controlledSelectedDate?.getTime();
+  useEffect(() => {
+    if (Number.isFinite(controlledTimestamp))
+      setPeriodDate(new Date(controlledTimestamp));
+  }, [controlledTimestamp]);
 
   const monthStart = startOfMonth(periodDate);
   const monthEnd = endOfMonth(periodDate);
@@ -185,7 +200,7 @@ const Calendar = ({
   });
   const weeks = Array.from(
     { length: Math.ceil(monthDays.length / 7) },
-    (_, index) => monthDays.slice(index * 7, index * 7 + 7),
+    (_, index) => monthDays.slice(index * 7, index * 7 + 7)
   );
   const weekStart = startOfWeek(periodDate, { weekStartsOn: 1 });
   const weekDays = eachDayOfInterval({
@@ -222,14 +237,16 @@ const Calendar = ({
       isCurrentMonth={isCurrentMonth}
       isSelected={isSameDay(date, selectedDate)}
       mode={mode}
+      eventDotClasses={eventDotClasses}
       onPress={() => selectDate(date)}
     />
   );
 
   return (
-    <View className="w-full bg-white px-4 pb-3 pt-5">
+    <View className={`w-full bg-white px-4 ${compact ? "" : "pb-3 pt-5"}`}>
       <CalendarHeader
         mode={mode}
+        compact={compact}
         periodDate={periodDate}
         onPrevious={() => movePeriod("previous")}
         onNext={() => movePeriod("next")}
@@ -258,7 +275,7 @@ const Calendar = ({
               className="flex-row items-center border-b border-b-grayscale-G100"
             >
               {dates.map((date) =>
-                renderDay(date, isSameMonth(date, periodDate)),
+                renderDay(date, isSameMonth(date, periodDate))
               )}
             </View>
           ))}

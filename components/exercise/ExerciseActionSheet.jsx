@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import Sheet from "./Sheet";
 import { metricInfo } from "./exerciseModel";
 
-function ExerciseActions({ exercise, onClose, onEdit, onDelete }) {
+function ExerciseActions({ exercise, onClose, onEdit, onDelete, children }) {
   const [confirming, setConfirming] = useState(false);
   const canManage = exercise.isCustom === true;
   return (
@@ -53,6 +53,7 @@ function ExerciseActions({ exercise, onClose, onEdit, onDelete }) {
               .join(", ")}
           </Text>
         </View>
+        {children}
         <ConfirmDialog
           visible={confirming}
           title={exercise.name}
