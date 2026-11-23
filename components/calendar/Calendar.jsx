@@ -17,7 +17,7 @@ import {
   subWeeks,
 } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"];
@@ -36,7 +36,15 @@ const DEFAULT_EVENTS = [
 
 const getDateKey = (date) => format(date, "yyyy-MM-dd");
 
-const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, compact, style }) => {
+const CalendarHeader = ({
+  mode,
+  periodDate,
+  onPrevious,
+  onNext,
+  compact,
+  compactLayout,
+  style,
+}) => {
   const weekStart = startOfWeek(periodDate, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(periodDate, { weekStartsOn: 1 });
   const title =
@@ -48,14 +56,14 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, compact, style }
 
   return (
     <View
-      className={`${compact ? "py-2" : "mb-4"} flex-row items-center justify-between`}
+      className={`${compact ? compactLayout === "exercise" ? "h-[58px]" : "py-2" : "mb-4"} flex-row items-center justify-between`}
       style={style}
     >
       <Pressable
         accessibilityLabel={mode === "week" ? "이전 주" : "이전 달"}
         accessibilityRole="button"
-        className={`${compact ? "h-[42px] w-[18px]" : "h-10 w-10"} items-center justify-center`}
-        hitSlop={compact ? 12 : 4}
+        className={`${compact && compactLayout !== "exercise" ? "h-[42px] w-[18px]" : "h-10 w-10"} items-center justify-center`}
+        hitSlop={compact && compactLayout !== "exercise" ? 12 : 4}
         onPress={onPrevious}
       >
         <LeftArrow size={18} color="#B7B7B7" strokeWidth={3} />
@@ -82,8 +90,8 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, compact, style }
       <Pressable
         accessibilityLabel={mode === "week" ? "다음 주" : "다음 달"}
         accessibilityRole="button"
-        className={`${compact ? "h-[42px] w-[18px]" : "h-10 w-10"} items-center justify-center`}
-        hitSlop={compact ? 12 : 4}
+        className={`${compact && compactLayout !== "exercise" ? "h-[42px] w-[18px]" : "h-10 w-10"} items-center justify-center`}
+        hitSlop={compact && compactLayout !== "exercise" ? 12 : 4}
         onPress={onNext}
       >
         <RightArrow size={18} color="#B7B7B7" strokeWidth={3} />
@@ -92,7 +100,7 @@ const CalendarHeader = ({ mode, periodDate, onPrevious, onNext, compact, style }
   );
 };
 
-const EventDots = ({ events }) => {
+const EventDots = ({ events, eventDotClasses }) => {
   const eventTypes = [...new Set(events.map((event) => event.type || "meal"))];
 
   return (
@@ -101,7 +109,7 @@ const EventDots = ({ events }) => {
         <View
           key={type}
           className={`h-1 w-1 rounded-full ${
-            EVENT_DOT_CLASS[type] || EVENT_DOT_CLASS.meal
+            eventDotClasses[type] || EVENT_DOT_CLASS.meal
           }`}
         />
       ))}
@@ -117,6 +125,7 @@ const CalendarDay = ({
   mode,
   compact,
   selectedTone,
+  eventDotClasses,
   onPress,
 }) => {
   const isTodayDate = isToday(date);
@@ -161,7 +170,7 @@ const CalendarDay = ({
           {format(date, "d")}
         </Text>
       </View>
-      <EventDots events={events} />
+      <EventDots events={events} eventDotClasses={eventDotClasses} />
     </Pressable>
   );
 };
@@ -176,6 +185,9 @@ const Calendar = ({
   headerStyle,
   rowStyle,
   compact = false,
+  // Preserve the exercise screen layout while retaining the trainer compact layout.
+  compactLayout = "default",
+  eventDotClasses = EVENT_DOT_CLASS,
   selectedTone = "default",
 }) => {
   const [periodDate, setPeriodDate] = useState(
@@ -186,6 +198,12 @@ const Calendar = ({
   );
   const selectedDate = controlledSelectedDate || internalSelectedDate;
   const isWeekMode = mode === "week";
+  const compactDays = compact && compactLayout !== "exercise";
+  const controlledTimestamp = controlledSelectedDate?.getTime();
+  useEffect(() => {
+    if (Number.isFinite(controlledTimestamp))
+      setPeriodDate(new Date(controlledTimestamp));
+  }, [controlledTimestamp]);
 
   const monthStart = startOfMonth(periodDate);
   const monthEnd = endOfMonth(periodDate);
@@ -233,15 +251,16 @@ const Calendar = ({
       isCurrentMonth={isCurrentMonth}
       isSelected={isSameDay(date, selectedDate)}
       mode={mode}
-      compact={compact}
+      compact={compactDays}
       selectedTone={selectedTone}
+      eventDotClasses={eventDotClasses}
       onPress={() => selectDate(date)}
     />
   );
 
   return (
     <View
-      className={`w-full bg-white px-4 ${compact ? "border-b border-grayscale-G100" : "pb-3 pt-5"}`}
+      className={`w-full bg-white px-4 ${compact ? compactLayout === "exercise" ? "" : "border-b border-grayscale-G100" : "pb-3 pt-5"}`}
     >
       <CalendarHeader
         mode={mode}
@@ -250,11 +269,12 @@ const Calendar = ({
         onNext={() => movePeriod("next")}
         style={headerStyle}
         compact={compact}
+        compactLayout={compactLayout}
       />
 
       {isWeekMode ? (
         <>
-          {compact && (
+          {compactDays && (
             <View className="flex-row items-center gap-1.5 py-1">
               {WEEKDAYS.map((day) => (
                 <Text
@@ -267,7 +287,7 @@ const Calendar = ({
             </View>
           )}
           <View
-            className={`flex-row items-center ${compact ? "gap-1.5" : "border-b border-b-grayscale-G100"}`}
+            className={`flex-row items-center ${compactDays ? "gap-1.5" : "border-b border-b-grayscale-G100"}`}
             style={rowStyle}
           >
             {weekDays.map((date) => renderDay(date))}
