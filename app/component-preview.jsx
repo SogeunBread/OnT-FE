@@ -20,6 +20,7 @@ import ChatPT from "@/components/chat_pt";
 import ReviewList from "@/components/review_list";
 import Calendar from "@/components/calendar";
 import PTScheduleCard from "@/components/pt_schedule_card";
+import ProfilePreview from "@/components/trainer-profile/ProfilePreview";
 import { chatPreview } from "@/constants/componentPreview";
 import { TRAINER_HOME_INITIAL_DATE, trainerHomeSchedules } from "@/constants/trainerHome";
 import { trainerConsultationRequests } from "@/constants/trainerConsultationRequests";
@@ -85,6 +86,10 @@ export default function ComponentPreview() {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingTop: 16, paddingBottom: 48, gap: 28 }}
       >
+        <Section title="트레이너 프로필 · 17개 디자인">
+          <Link href="/(trainerTabs)/profile" className="text-14 text-primary-main">트레이너 프로필 화면으로</Link>
+          <ProfilePreview />
+        </Section>
         <View className="w-full max-w-[390px] gap-2 self-center px-4">
           <Link href="/(userTabs)/home" className="text-14 text-primary-main">
             홈으로
