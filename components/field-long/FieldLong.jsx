@@ -6,6 +6,8 @@ const FieldLong = ({
   value,
   defaultValue = "",
   onChangeText,
+  onFocus,
+  onBlur,
   placeholder = "content",
   className = "",
   inputClassName = "",
@@ -39,8 +41,14 @@ const FieldLong = ({
         editable={!disabled}
         value={inputValue}
         onChangeText={handleChangeText}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onFocus={(event) => {
+          setIsFocused(true);
+          onFocus?.(event);
+        }}
+        onBlur={(event) => {
+          setIsFocused(false);
+          onBlur?.(event);
+        }}
         placeholder={placeholder}
         placeholderTextColor={colors.grayscale.G500}
         maxLength={maxLength}

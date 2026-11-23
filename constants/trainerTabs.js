@@ -8,6 +8,6 @@ export const trainerTabs = [
   { name: "profile", label: "프로필", Icon: TrainerIcon },
   { name: "manage", label: "관리", Icon: ManageIcon },
   { name: "home", label: "홈", Icon: HomeIcon },
-  { name: "chat", label: "상담", Icon: ChatIcon },
+  { name: "chat", label: "채팅", Icon: ChatIcon },
   { name: "mypage", label: "내 정보", Icon: PersonIcon },
 ];

@@ -1,7 +1,7 @@
 import Button from "@/components/button";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useMemo, useRef } from "react";
-import { ScrollView } from "react-native-gesture-handler";
+import { Pressable, ScrollView } from "react-native-gesture-handler";
 import {
   Image,
   Text,
@@ -45,7 +45,7 @@ const toImageSource = (source) => {
   return typeof source === "string" ? { uri: source } : source;
 };
 
-const PhotoStrip = ({ photos }) => {
+const PhotoStrip = ({ photos, onPhotoPress, showsHorizontalScrollIndicator }) => {
   const photoSlots = photos.filter(Boolean);
 
   if (photoSlots.length === 0) return null;
@@ -56,19 +56,32 @@ const PhotoStrip = ({ photos }) => {
       nestedScrollEnabled
       directionalLockEnabled
       alwaysBounceHorizontal={false}
-      showsHorizontalScrollIndicator
+      showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
       className="w-full"
       contentContainerStyle={{ gap: 10 }}
     >
-      {photoSlots.map((photo, index) => (
-        <Image
-          key={index}
-          source={toImageSource(photo)}
-          resizeMode="cover"
-          className="shrink-0 rounded-[6px]"
-          style={{ width: 120, height: 120 }}
-        />
-      ))}
+      {photoSlots.map((photo, index) => {
+        const image = (
+          <Image
+            key={index}
+            source={toImageSource(photo)}
+            resizeMode="cover"
+            className="shrink-0 rounded-[6px]"
+            style={{ width: 120, height: 120 }}
+          />
+        );
+        return onPhotoPress ? (
+          <Pressable
+            key={index}
+            accessibilityRole="button"
+            accessibilityLabel={`식사 사진 ${index + 1} 크게 보기`}
+            onPress={() => onPhotoPress(index)}
+            style={{ width: 120, height: 120 }}
+          >
+            {image}
+          </Pressable>
+        ) : image;
+      })}
     </ScrollView>
   );
 };
@@ -159,13 +172,24 @@ const BottomSheetMeal = ({
   initialHeight = 522,
   maxHeight,
   draggable = true,
+  onPhotoPress,
+  photoScrollIndicator = true,
+  titleNumberOfLines = 1,
+  editDisabled,
+  backdropComponent,
+  handleStyle,
+  contentContainerStyle,
+  onContentSizeChange,
+  enableDynamicSizing,
 }) => {
   const { height: windowHeight } = useWindowDimensions();
   const bottomSheetRef = useRef(null);
   const normalizedFeedback = normalizeFeedback(feedback);
   const shouldShowPhoto = hasPhotos ?? photo;
   const shouldShowDetail = hasMealContent ?? datail ?? detail;
-  const canEdit = normalizedFeedback !== BOTTOM_SHEET_MEAL_FEEDBACK.DONE;
+  const canEdit = editDisabled === undefined
+    ? normalizedFeedback !== BOTTOM_SHEET_MEAL_FEEDBACK.DONE
+    : !editDisabled;
   const resolvedMaxHeight = Math.min(
     maxHeight ?? windowHeight * 0.9,
     windowHeight * 0.9,
@@ -192,6 +216,9 @@ const BottomSheetMeal = ({
       enableHandlePanningGesture={draggable}
       enableContentPanningGesture={draggable}
       onClose={onClose}
+      backdropComponent={backdropComponent}
+      handleStyle={handleStyle}
+      enableDynamicSizing={enableDynamicSizing}
       backgroundStyle={{
         backgroundColor: "white",
         borderTopLeftRadius: 20,
@@ -210,11 +237,12 @@ const BottomSheetMeal = ({
         className={`w-full ${className}`}
         showsVerticalScrollIndicator={false}
         bounces={false}
-        contentContainerStyle={{
+        onContentSizeChange={onContentSizeChange}
+        contentContainerStyle={[{
           gap: 20,
           paddingHorizontal: 16,
           paddingBottom: 16,
-        }}
+        }, contentContainerStyle]}
       >
         <View className="w-full gap-4">
           <View className="w-full gap-2">
@@ -224,7 +252,7 @@ const BottomSheetMeal = ({
 
             <View className="w-full gap-1">
               <Text
-                numberOfLines={1}
+                numberOfLines={titleNumberOfLines}
                 className="w-full text-18 font-pretendard-bold text-text"
               >
                 {title}
@@ -235,7 +263,9 @@ const BottomSheetMeal = ({
             </View>
           </View>
 
-          {shouldShowPhoto ? <PhotoStrip photos={photos} /> : null}
+          {shouldShowPhoto ? (
+            <PhotoStrip photos={photos} onPhotoPress={onPhotoPress} showsHorizontalScrollIndicator={photoScrollIndicator} />
+          ) : null}
 
           {shouldShowDetail && mealContent ? (
             <View className="w-full gap-1">

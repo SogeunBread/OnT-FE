@@ -25,7 +25,9 @@ const CheckSquare = ({
   onChange,
   className = "",
   boxClassName = "",
+  boxStyle,
   labelClassName = "",
+  children,
   disabled,
   checkIcon: CustomCheckIcon,
   ...restProps
@@ -64,6 +66,7 @@ const CheckSquare = ({
       disabled={disabled}
     >
       <View
+        style={boxStyle}
         className={`size-[24px] items-center justify-center rounded-[4px] border ${currentStyle.box} ${boxClassName}`}
       >
         <View className="relative">
@@ -75,13 +78,13 @@ const CheckSquare = ({
         </View>
       </View>
 
-      {label ? (
+      {children ?? (label ? (
         <Text
           className={`text-14 font-pretendard-medium ${currentStyle.label} ${labelClassName}`}
         >
           {label}
         </Text>
-      ) : null}
+      ) : null)}
     </Pressable>
   );
 };

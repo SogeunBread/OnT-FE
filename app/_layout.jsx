@@ -26,6 +26,7 @@ export default function RootLayout() {
           <Stack.Screen name="(userTabs)" />
           <Stack.Screen name="(trainerTabs)" />
           <Stack.Screen name="(exerciseFlow)" />
+          <Stack.Screen name="(trainer)" />
           <Stack.Screen name="component-preview" />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>

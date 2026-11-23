@@ -12,6 +12,7 @@ const Modal = ({
   onLeftPress = () => {},
   onRightPress = () => {},
   icon,
+  style,
   className = "",
   leftButtonVariant = "weak",
   buttonsDisabled = false,
@@ -25,6 +26,7 @@ const Modal = ({
   return (
     <View
       {...viewProps}
+      style={style}
       className={`w-[358px] rounded-[12px] bg-white px-[12px] pt-[20px] pb-[12px] items-center gap-[16px] ${className}`}
     >
       {icon}

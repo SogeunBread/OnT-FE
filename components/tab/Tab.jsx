@@ -7,6 +7,7 @@ const Tab = ({
   onPress,
   className = "",
   textClassName = "",
+  textStyle,
   ...props
 }) => {
   const textTone = selected ? "text-primary-main" : "text-grayscale-G600";
@@ -22,6 +23,7 @@ const Tab = ({
       className={`items-center border-b-2 py-4 ${underlineTone} ${disabled ? "opacity-60" : ""} ${className}`}
     >
       <Text
+        style={textStyle}
         className={`text-14 font-pretendard-semibold leading-[21px] ${textTone} ${textClassName}`}
       >
         {text}

@@ -78,6 +78,7 @@ export default function ExerciseHomeScreen() {
       {state.ready && (
         <Calendar
           compact
+          compactLayout="exercise"
           mode="week"
           selectedDate={new Date(`${selected}T12:00:00`)}
           events={events}

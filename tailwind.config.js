@@ -13,6 +13,7 @@ const colors = {
   },
   secondary: {
     blue: "#62B1FF",
+    blueLight: "#E0EFFF",
     yellow: "#FFC74D",
   },
   grayscale: {

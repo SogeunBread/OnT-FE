@@ -1,0 +1,35 @@
+.meal-time-wheels {
+  display: flex;
+  gap: 16px;
+  font-family: Pretendard, sans-serif;
+}
+
+.meal-time-wheel {
+  flex: 1;
+  min-width: 0;
+}
+
+.meal-time-wheel-label {
+  margin-bottom: 8px;
+  color: #888888;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  text-align: center;
+}
+
+.meal-time-wheel [data-rwp-option] {
+  color: #a0a0a0;
+  font-size: 24px;
+}
+
+.meal-time-wheel [data-rwp-highlight-wrapper] {
+  border-radius: 6px;
+  background: #ffece8;
+}
+
+.meal-time-wheel [data-rwp-highlight-item] {
+  color: #111111;
+  font-size: 24px;
+  font-weight: 600;
+}
