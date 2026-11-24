@@ -1,16 +1,14 @@
 import HeaderMain from "@/components/header_main";
 import NavigationBar from "@/components/navigation/NavigationBar";
-import { MealRecordsProvider } from "@/components/meal-record/MealRecordsContext";
 import { userTabs } from "@/constants/userTabs";
 import { Tabs } from "expo-router";
 
 export default function UserTabsLayout() {
   return (
-    <MealRecordsProvider>
       <Tabs
         tabBar={(props) => {
           const route = props.state.routes[props.state.index];
-          return route.name === "meal-record" ? null : <NavigationBar {...props} tabs={userTabs} />;
+          return ["meal-record", "trainer-matching"].includes(route.name) ? null : <NavigationBar {...props} tabs={userTabs} />;
         }}
         screenOptions={{
           headerShown: true,
@@ -39,7 +37,7 @@ export default function UserTabsLayout() {
         <Tabs.Screen
           name="trainer-matching"
           options={{
-            href: null,
+            href: null, headerShown: false,
           }}
         />
         <Tabs.Screen
@@ -47,6 +45,5 @@ export default function UserTabsLayout() {
           options={{ href: null, headerShown: false }}
         />
       </Tabs>
-    </MealRecordsProvider>
   );
 }

@@ -1,3 +1,7 @@
+import { createUserTrainerMeals } from "@/constants/userTrainerMeals";
+import UserTrainerProvider from "@/features/user-trainer/UserTrainerProvider";
+import { ExerciseProvider } from "@/features/exercise/ExerciseProvider";
+import { MealRecordsProvider } from "@/components/meal-record/MealRecordsContext";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { Text, View } from "react-native";
@@ -21,15 +25,23 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <TrainerChatProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(userTabs)" />
-          <Stack.Screen name="(trainerTabs)" />
-          <Stack.Screen name="(trainer)" />
-          <Stack.Screen name="component-preview" />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        </Stack>
-      </TrainerChatProvider>
+      <ExerciseProvider>
+        <MealRecordsProvider additionalRecords={createUserTrainerMeals()}>
+          <UserTrainerProvider>
+            <TrainerChatProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(userTabs)" />
+                <Stack.Screen name="(trainerTabs)" />
+                <Stack.Screen name="(trainer)" />
+                <Stack.Screen name="(exerciseFlow)" />
+                <Stack.Screen name="(userTrainerFlow)" />
+                <Stack.Screen name="component-preview" />
+                <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+              </Stack>
+            </TrainerChatProvider>
+          </UserTrainerProvider>
+        </MealRecordsProvider>
+      </ExerciseProvider>
     </GestureHandlerRootView>
   );
 }

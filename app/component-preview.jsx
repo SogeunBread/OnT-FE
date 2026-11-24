@@ -1,3 +1,4 @@
+import UserTrainerPreview from "@/features/user-trainer/UserTrainerPreview";
 import { useState } from "react";
 import ExerciseComponentsPreview from "@/components/preview/ExerciseComponentsPreview";
 import { Link } from "expo-router";
@@ -88,6 +89,10 @@ export default function ComponentPreview() {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingTop: 16, paddingBottom: 48, gap: 28 }}
       >
+        <Section title="회원 트레이너 탭 · 26개 디자인">
+          <Link href="/(userTabs)/trainer" className="text-14 text-primary-main">회원 트레이너 탭으로</Link>
+          <UserTrainerPreview />
+        </Section>
         <Section title="트레이너 채팅 · 12개 디자인">
           <Link href="/(trainerTabs)/chat" className="text-14 text-primary-main">트레이너 채팅 화면으로</Link>
           <TrainerChatPreview />

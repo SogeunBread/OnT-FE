@@ -18,6 +18,7 @@ const Field = ({
   state,
   style,
   inputComponent: Input = TextInput,
+  inputRef,
   ...restProps
 }) => {
   const isControlled = typeof value === "string";
@@ -36,6 +37,7 @@ const Field = ({
       {icon && <SearchIcon />}
       <Input
         {...restProps}
+        ref={inputRef}
         value={inputValue}
         onChangeText={(text) => {
           if (!isControlled) setInternalValue(text);
