@@ -1,5 +1,15 @@
 # 진행 상황
 
+## #24와 dev 병합 충돌 해결
+
+- `app/_layout.jsx`에서 기존 운동·식단·회원 채팅·트레이너 채팅 Provider와
+  라우트를 유지하고 TrainerSettingsProvider를 추가했다.
+- `app/component-preview.jsx`의 회원 트레이너 26개와 트레이너 설정 7개
+  미리보기를 각각 독립된 Section으로 유지했다.
+- 이 문서와 UNCERTAINTY.md의 #24·#26 기록을 모두 보존했다.
+- 검증: 전체 테스트 33개, 웹 export와 Android/iOS export, 차이 검사 통과.
+  충돌 표시는 남아 있지 않다. 병합 후 브라우저 상호작용·실기기 재검증은 미수행이다.
+
 - 작업 지침 보완: AGENTS.md의 토큰 절약 항목에 디자인 분석 재사용, 대표 화면과
   상태별 차이 검증, 텍스트 중심 확인, 검증 묶음, 다음 대화용 기록 기준을 반영했다.
   문서 변경 내용과 `git diff --check`를 확인했다.
@@ -83,6 +93,41 @@
 - 분석 결과를 기존 [#24](https://github.com/SogeunBread/OnT-FE/issues/24)에 작성하고
   GitHub 저장 본문이 원문과 일치함을 확인했다. 문서 차이 검사도 통과했다.
   이번 작업에서는 빌드/테스트를 실행하지 않았다.
+## 트레이너 설정 #26 — 2026-11-24
+
+- 브랜치 `feature/26-trainer-setting`, upstream `origin/feature/26-trainer-setting`,
+  `push.default=simple` 확인. 커밋·푸시는 수행하지 않았다.
+- `AGENTS.md`와 기존 구현·라우팅·컴포넌트·커밋 형식을 확인했다.
+- 지정 Figma 7개 화면의 표현용 컴포넌트를 `features/trainer-settings/`에 추가했다.
+  내 정보, 계정 프로필, 앱 설정 off/on, 알림 설정 off/on, 지난 PT 기록이다.
+  실제 내 정보 탭과 상세 라우트 연결을 완료했다.
+- `HeaderMain`, `HeaderDetail`, `List`, `Toggle`, `Field`, `ChipSquare`,
+  `NavigationBar`를 수정 없이 재사용했다. 목업은 `constants/trainerSettings.js`로 분리했다.
+- 새 SVG는 `settings-kakao-mark.svg`(10.9091px), `settings-account-right.svg`(16px).
+  기존 프로필 기본 이미지(100px)·카메라(20px)·회원 기본 이미지(52px)는
+  디자인 다운로드 파일과 SHA256 완전 일치를 확인해 재사용했다.
+- `/component-preview` 상단에서 7개 상태를 개별 확인할 수 있다.
+- 확정 정책 반영: 실제 설정에 다크모드 행을 남기고 토글은 비활성화했다.
+  프로필은 뒤로 갈 때 검증 후 저장하며 오류가 있으면 화면을 유지한다.
+  지난 PT 기록은 관리 탭 선택 상태이고, 로그아웃·탈퇴·문의·약관은 준비 중 안내다.
+- 계정 프로필은 공개 트레이너 프로필과 별도 메모리 상태다. 이름·실재/미래 날짜·
+  연락처(숫자 10~11자리)·성별을 검증하며 사진 선택/오류/취소와 blob 해제를 처리한다.
+  `usePreventRemove`로 네비게이션 이탈에도 검증을 적용하며 헤더 복귀는 `dismissTo`로
+  내 정보에 돌아간다. 직접 진입에도 복귀 경로가 있다.
+- 라우트: `/(trainerTabs)/mypage` → `/(trainer)/account-settings`,
+  `notification-settings`, `past-pt-records`. 상세는 트레이너 Stack에 등록하고,
+  기록 화면에서만 기존 NavigationBar를 관리 선택 상태로 재사용했다.
+- 검증: 웹·Android·iOS export 통과(실기기 실행과 구분).
+  `node --test tests/trainerSettings.test.mjs` 2개 통과.
+  Chrome 390×844 / 320×640에서 7개 미리보기와 실제 화면의 입력 오류 차단·
+  저장/재진입·성별·사진 선택·준비 중 안내·푸시/세부 알림 상태 유지·
+  관리 선택·작은 화면 스크롤·직접 프로필 진입 후 복귀를 확인했다.
+- 제한: API·실제 인증/푸시 발송·영구 저장은 미연동이며 새로고침 시 초기화된다.
+  모바일 실기기의 키보드·Safe Area·사진 권한과 뒤로 가기 제스처는 미검증이다.
+  기존 react-datepicker CSS exports / Browserslist 경고는 빌드를 막지 않는다.
+- 별도 기존 문제: 공개 트레이너 프로필 탭은 `useTrainerProfile`을 사용하지만
+  `TrainerProfileProvider`가 앱 레이아웃에 연결되어 있지 않다. 이번 계정 설정과
+  별개이며 수정하지 않았다. 프로필 탭 이동은 후속 보완이 필요하다.
 
 ## 트레이너 채팅 — 2026-11-24
 

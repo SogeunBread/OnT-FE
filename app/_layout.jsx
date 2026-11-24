@@ -7,6 +7,7 @@ import { Stack } from "expo-router";
 import { Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import TrainerChatProvider from "@/features/trainer-chat/TrainerChatProvider";
+import TrainerSettingsProvider from "@/features/trainer-settings/TrainerSettingsProvider";
 import "../global.css";
 
 export default function RootLayout() {
@@ -29,15 +30,17 @@ export default function RootLayout() {
         <MealRecordsProvider additionalRecords={createUserTrainerMeals()}>
           <UserTrainerProvider>
             <TrainerChatProvider>
-              <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="(userTabs)" />
-                <Stack.Screen name="(trainerTabs)" />
-                <Stack.Screen name="(trainer)" />
-                <Stack.Screen name="(exerciseFlow)" />
-                <Stack.Screen name="(userTrainerFlow)" />
-                <Stack.Screen name="component-preview" />
-                <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-              </Stack>
+              <TrainerSettingsProvider>
+                <Stack screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="(userTabs)" />
+                  <Stack.Screen name="(trainerTabs)" />
+                  <Stack.Screen name="(trainer)" />
+                  <Stack.Screen name="(exerciseFlow)" />
+                  <Stack.Screen name="(userTrainerFlow)" />
+                  <Stack.Screen name="component-preview" />
+                  <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+                </Stack>
+              </TrainerSettingsProvider>
             </TrainerChatProvider>
           </UserTrainerProvider>
         </MealRecordsProvider>
