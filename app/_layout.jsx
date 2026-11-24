@@ -1,3 +1,4 @@
+import MemberSettingsProvider from "@/features/user-settings/MemberSettingsProvider";
 import DiscoveryProvider from "@/features/user-home/DiscoveryProvider";
 import { createUserTrainerMeals } from "@/constants/userTrainerMeals";
 import UserTrainerProvider from "@/features/user-trainer/UserTrainerProvider";
@@ -33,6 +34,7 @@ export default function RootLayout() {
             <TrainerChatProvider>
               <TrainerSettingsProvider>
                 <DiscoveryProvider>
+                  <MemberSettingsProvider>
                   <Stack screenOptions={{ headerShown: false }}>
                     <Stack.Screen name="(userTabs)" />
                     <Stack.Screen name="(trainerTabs)" />
@@ -40,9 +42,11 @@ export default function RootLayout() {
                     <Stack.Screen name="(exerciseFlow)" />
                     <Stack.Screen name="(userTrainerFlow)" />
                     <Stack.Screen name="(userHomeFlow)" />
+                    <Stack.Screen name="(userSettingsFlow)" />
                     <Stack.Screen name="component-preview" />
                     <Stack.Screen name="modal" options={{ presentation: "modal" }} />
                   </Stack>
+                  </MemberSettingsProvider>
                 </DiscoveryProvider>
               </TrainerSettingsProvider>
             </TrainerChatProvider>

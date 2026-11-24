@@ -5,11 +5,12 @@ import { Pressable, View } from "react-native";
 export default function Star({
   active = true,
   activeIcon = StarOn,
+  inactiveIcon = StarOff,
   onPress,
   accessibilityLabel = "별점",
   className = "",
 }) {
-  const Icon = active ? activeIcon : StarOff;
+  const Icon = active ? activeIcon : inactiveIcon;
   return onPress ? (
     <Pressable
       accessibilityRole="button"

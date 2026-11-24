@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const source = await readFile(new URL("../features/trainer-settings/account.js", import.meta.url), "utf8");
+const source = await readFile(new URL("../components/settings/account.js", import.meta.url), "utf8");
 const { validateAccount, normalizeAccount } = await import(`data:text/javascript;base64,${Buffer.from(source).toString("base64")}`);
 const account = { name: "홍길동", birthDate: "1997-12-21", phone: "010-1234-5678", gender: "male" };
 

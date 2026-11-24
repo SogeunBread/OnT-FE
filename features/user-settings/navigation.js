@@ -1,0 +1,2 @@
+export const settingsRoutes = { home: "/(userTabs)/mypage", account: "/(userSettingsFlow)/member-account", notifications: "/(userSettingsFlow)/member-notifications", history: "/(userSettingsFlow)/member-request-history", reviews: "/(userSettingsFlow)/member-reviews", wishlist: "/(userSettingsFlow)/member-wishlist" };
+export const reviewRoute = (historyId, reviewId) => ({ pathname: "/(userSettingsFlow)/member-review/[id]", params: { id: historyId, ...(reviewId ? { reviewId } : {}) } });

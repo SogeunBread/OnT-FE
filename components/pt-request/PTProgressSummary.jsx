@@ -23,7 +23,14 @@ export default function PTProgressSummary({ summary: member, className = "" }) {
                   />
                 </View>
               </View>
-              <View className="h-[66px] flex-row items-center rounded-lg bg-grayscale-G100/30 py-3">
+              <PTCountSummary summary={member} />
+            </View>
+  );
+}
+
+export function PTCountSummary({ summary: member, className = "", valueClassName = "text-text" }) {
+  return (
+              <View className={`h-[66px] flex-row items-center rounded-lg bg-grayscale-G100/30 py-3 ${className}`}>
                 {[
                   ["전체 PT 횟수", member.totalPT],
                   ["완료된 PT", member.completedPT],
@@ -36,12 +43,11 @@ export default function PTProgressSummary({ summary: member, className = "" }) {
                     <Text className="text-12 font-pretendard-medium text-grayscale-G600">
                       {label}
                     </Text>
-                    <Text className="text-16 font-pretendard-semibold text-text">
+                    <Text className={`text-16 font-pretendard-semibold ${valueClassName}`}>
                       {value}
                     </Text>
                   </View>
                 ))}
               </View>
-            </View>
   );
 }
