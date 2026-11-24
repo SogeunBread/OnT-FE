@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import TrainerChatProvider from "@/features/trainer-chat/TrainerChatProvider";
+import TrainerSettingsProvider from "@/features/trainer-settings/TrainerSettingsProvider";
 import "../global.css";
 
 export default function RootLayout() {
@@ -22,6 +23,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TrainerChatProvider>
+        <TrainerSettingsProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(userTabs)" />
           <Stack.Screen name="(trainerTabs)" />
@@ -29,6 +31,7 @@ export default function RootLayout() {
           <Stack.Screen name="component-preview" />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>
+        </TrainerSettingsProvider>
       </TrainerChatProvider>
     </GestureHandlerRootView>
   );

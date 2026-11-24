@@ -23,6 +23,7 @@ import Calendar from "@/components/calendar";
 import PTScheduleCard from "@/components/pt_schedule_card";
 import ProfilePreview from "@/components/trainer-profile/ProfilePreview";
 import TrainerChatPreview from "@/features/trainer-chat/TrainerChatPreview";
+import TrainerSettingsPreview from "@/features/trainer-settings/TrainerSettingsPreview";
 import { chatPreview } from "@/constants/componentPreview";
 import { TRAINER_HOME_INITIAL_DATE, trainerHomeSchedules } from "@/constants/trainerHome";
 import { trainerConsultationRequests } from "@/constants/trainerConsultationRequests";
@@ -88,6 +89,10 @@ export default function ComponentPreview() {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingTop: 16, paddingBottom: 48, gap: 28 }}
       >
+        <Section title="트레이너 설정 · 7개 디자인">
+          <Link href="/(trainerTabs)/mypage" className="text-14 text-primary-main">트레이너 설정 화면으로</Link>
+          <TrainerSettingsPreview />
+        </Section>
         <Section title="트레이너 채팅 · 12개 디자인">
           <Link href="/(trainerTabs)/chat" className="text-14 text-primary-main">트레이너 채팅 화면으로</Link>
           <TrainerChatPreview />

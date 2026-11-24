@@ -7,6 +7,9 @@ export default function TrainerStackLayout() {
       <Stack.Screen name="profile-reviews" />
       <Stack.Screen name="chat/[id]" />
       <Stack.Screen name="member-detail" />
+      <Stack.Screen name="account-settings" />
+      <Stack.Screen name="notification-settings" />
+      <Stack.Screen name="past-pt-records" />
     </Stack>
   );
 }
