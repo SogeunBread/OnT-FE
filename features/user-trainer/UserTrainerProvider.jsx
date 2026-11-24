@@ -40,7 +40,17 @@ export default function UserTrainerProvider({ children, initialSeed }) {
     if (requestId) return send({ type: "edit-request", roomId, requestId, details });
     const stamp = userMessageStamp();
     return send({ type: "request", roomId, stamp,
-      request: { ...sampleUserRequest, ...details, id: `request-${stamp.id}`, sentAt: new Date().toISOString(), trainerName: current.current.rooms.find((item) => item.id === roomId).trainer.name } });
+      request: { ...sampleUserRequest, ...details, id: `request-${stamp.id}`, sentAt: new Date().toISOString(), trainerName: current.current.rooms.find((item) => item.id === roomId).trainer.name,
+        gymName: current.current.rooms.find((item) => item.id === roomId).trainer.gymName ?? current.current.rooms.find((item) => item.id === roomId).trainer.location?.name ?? "" } });
+  };
+  const ensureConsultation = (trainer, initialAnswers = {}) => {
+    if (!current.current.ready || !trainer?.id) return null;
+    const existing = current.current.rooms.find((room) => room.trainerId === trainer.id || room.id === trainer.id);
+    if (existing) return existing.id;
+    const roomId = `discovery-${trainer.id}`;
+    send({ type: "add-demo-room", room: { id: roomId, trainerId: trainer.id, initialAnswers: JSON.parse(JSON.stringify(initialAnswers)),
+      trainer: { ...trainer, name: `${trainer.name} 트레이너` }, matched: false, unreadCount: 0, requests: [], messages: [] } });
+    return roomId;
   };
   const submitMatching = (details) => {
     const roomId = "matching-consultation";
@@ -48,7 +58,7 @@ export default function UserTrainerProvider({ children, initialSeed }) {
     if (current.current.rooms.find((room) => room.id === roomId)?.requests.some((request) => ["pending", "accepted"].includes(request.status))) return roomId;
     return submitRequest(roomId, details) ? roomId : null;
   };
-  return <Context.Provider value={{ state, send, sendText, sendPhoto, submitRequest, submitMatching }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ state, send, sendText, sendPhoto, submitRequest, submitMatching, ensureConsultation }}>{children}</Context.Provider>;
 }
 export function useUserTrainer() {
   const value = useContext(Context);

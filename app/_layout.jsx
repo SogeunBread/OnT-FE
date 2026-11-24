@@ -1,3 +1,4 @@
+import DiscoveryProvider from "@/features/user-home/DiscoveryProvider";
 import { createUserTrainerMeals } from "@/constants/userTrainerMeals";
 import UserTrainerProvider from "@/features/user-trainer/UserTrainerProvider";
 import { ExerciseProvider } from "@/features/exercise/ExerciseProvider";
@@ -31,15 +32,18 @@ export default function RootLayout() {
           <UserTrainerProvider>
             <TrainerChatProvider>
               <TrainerSettingsProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="(userTabs)" />
-                  <Stack.Screen name="(trainerTabs)" />
-                  <Stack.Screen name="(trainer)" />
-                  <Stack.Screen name="(exerciseFlow)" />
-                  <Stack.Screen name="(userTrainerFlow)" />
-                  <Stack.Screen name="component-preview" />
-                  <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-                </Stack>
+                <DiscoveryProvider>
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="(userTabs)" />
+                    <Stack.Screen name="(trainerTabs)" />
+                    <Stack.Screen name="(trainer)" />
+                    <Stack.Screen name="(exerciseFlow)" />
+                    <Stack.Screen name="(userTrainerFlow)" />
+                    <Stack.Screen name="(userHomeFlow)" />
+                    <Stack.Screen name="component-preview" />
+                    <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+                  </Stack>
+                </DiscoveryProvider>
               </TrainerSettingsProvider>
             </TrainerChatProvider>
           </UserTrainerProvider>

@@ -20,9 +20,10 @@ function Section({ title, empty, children, hasContent }) {
   );
 }
 
-export function DetailCard({ title, first, second, children, className = "" }) {
+export function DetailCard({ title, first, second, children, leading, className = "" }) {
   return (
     <View className={`flex-row items-center gap-3 rounded-lg border border-grayscale-G100 p-3 ${className}`}>
+      {leading}
       <View className="min-w-0 flex-1 gap-0.5">
         <Text className="text-14 font-pretendard-semibold text-text">{title}</Text>
         <View className="flex-row flex-wrap items-center gap-x-2 gap-y-0.5">
@@ -64,10 +65,17 @@ export default function ProfileView({ profile, onEdit, onReviews, onPressMap }) 
         </View>
         {profile.specialties.length ? <View className="flex-row flex-wrap gap-1.5">{profile.specialties.map((text) => <Tag key={text} text={text} />)}</View> : null}
       </View>
-      <View className="gap-5 px-4 pt-5">
-        <Section title="소개글" empty="아직 작성한 소개글이 없어요." hasContent={Boolean(profile.introduction)}><Text className="text-14 font-pretendard-regular text-text">{profile.introduction}</Text></Section>
+      <ProfileSections profile={profile} onPressMap={onPressMap} />
+    </ScrollView>
+  );
+}
+
+export function ProfileSections({ profile, includeIntroduction = true, locationLeading, onPressMap }) {
+  return (
+    <View className="gap-5 px-4 pt-5">
+        {includeIntroduction && <Section title="소개글" empty="아직 작성한 소개글이 없어요." hasContent={Boolean(profile.introduction)}><Text className="text-14 font-pretendard-regular text-text">{profile.introduction}</Text></Section>}
         <Section title="수업 위치" empty="아직 등록한 수업 위치 정보가 없어요." hasContent={Boolean(profile.location)}>
-          {profile.location ? <Pressable accessibilityRole="button" accessibilityLabel="수업 위치 지도에서 보기" onPress={() => onPressMap?.(profile.location)}><DetailCard title={profile.location.name} first={[profile.location.address, profile.location.detailAddress].filter(Boolean).join(" ")} /></Pressable> : null}
+          {profile.location ? <Pressable accessibilityRole="button" accessibilityLabel="수업 위치 지도에서 보기" onPress={() => onPressMap?.(profile.location)}><DetailCard leading={locationLeading} title={profile.location.name} first={[profile.location.address, profile.location.detailAddress].filter(Boolean).join(" ")} /></Pressable> : null}
         </Section>
         <Section title="가격" empty="아직 등록한 가격 정보가 없어요." hasContent={profile.prices.length > 0}>
           <View className="rounded-lg border border-grayscale-G100 px-3 py-1">
@@ -83,6 +91,5 @@ export default function ProfileView({ profile, onEdit, onReviews, onPressMap }) 
           <View className="rounded-lg border border-grayscale-G100 px-3">{profile.certificates.map((item, index) => <DetailCard key={item.id} className={`rounded-none border-0 px-0 ${index ? "border-t border-grayscale-G100" : ""}`} title={item.name} first={`${formatMonth(item.acquiredDate)} 취득`} second={item.issuer} />)}</View>
         </Section>
       </View>
-    </ScrollView>
   );
 }
