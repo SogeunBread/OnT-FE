@@ -1,3 +1,4 @@
+import { useUserTrainer } from "@/features/user-trainer/UserTrainerProvider";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
@@ -302,9 +303,20 @@ const steps = [
   },
 ];
 
-export default function TrainerMatching() {
+function detailsFromAnswers(answers) {
+  const optionTitle = (id, value) => steps.find((step) => step.id === id)?.options?.find((option) => option.id === value)?.title ?? "";
+  const goals = (answers.goal ?? []).map((value) => optionTitle("goal", value));
+  const preference = steps.find((step) => step.id === "trainerPreference").groups.map((group) => group.options.find((option) => option.id === answers.trainerPreference?.[group.id])?.title).filter(Boolean).join("・");
+  return { answers: JSON.parse(JSON.stringify(answers)), purpose: optionTitle("ptType", answers.ptType),
+    detailPurpose: goals.join("・"), experience: optionTitle("experience", answers.experience),
+    lessonCount: answers.lessonCount === "unknown" ? "잘 모르겠어요." : Number(answers.lessonCount),
+    regions: (answers.location ?? []).map((item) => item.chipTitle ?? item.title), preferredTrainer: preference, note: answers.memo ?? "" };
+}
+
+export default function TrainerMatching({ initialAnswers = {}, onComplete, onCancel }) {
+  const { submitMatching } = useUserTrainer();
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState(() => JSON.parse(JSON.stringify(initialAnswers)));
   const [selectedProvinceId, setSelectedProvinceId] = useState(null);
   const [selectedDistrictId, setSelectedDistrictId] = useState(null);
   const [isLocationSearchOpen, setIsLocationSearchOpen] = useState(false);
@@ -425,7 +437,8 @@ export default function TrainerMatching() {
       return;
     }
 
-    router.back();
+    if (onCancel) onCancel();
+    else router.back();
   };
 
   const handleNext = () => {
@@ -439,7 +452,12 @@ export default function TrainerMatching() {
       return;
     }
 
-    router.push("/trainer");
+    const details = detailsFromAnswers(answers);
+    if (onComplete) onComplete(answers, details);
+    else {
+      const roomId = submitMatching(details);
+      if (roomId) router.replace({ pathname: "/(userTrainerFlow)/trainer-chat/[id]", params: { id: roomId } });
+    }
   };
 
   const selectedProvince = locationData.find(

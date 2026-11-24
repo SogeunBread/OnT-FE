@@ -18,12 +18,13 @@ const feedbackForDraft = (draft) => !draft.hasMatchedTrainer
     ? MEAL_CARD_FEEDBACK.WAITING
     : MEAL_CARD_FEEDBACK.NOT_REQUESTED;
 
-export function MealRecordsProvider({ children }) {
+export function MealRecordsProvider({ children, additionalRecords = [] }) {
   const [records, setRecords] = useState(() => [
     createFeedbackMealSample(),
     createWaitingMealSample(),
     createNotRequestedMealSample(),
     createNoTrainerMealSample(),
+    ...additionalRecords,
   ]);
   const [today, setToday] = useState(() => startOfDay(new Date()));
   const nextId = useRef(0);
