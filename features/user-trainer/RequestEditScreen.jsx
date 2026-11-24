@@ -18,7 +18,7 @@ export default function RequestEditScreen() {
   if (!allowed) return <View className="flex-1 items-center justify-center gap-5 px-4">
     <Text className="text-14 text-grayscale-G600">지금은 요청서를 작성하거나 수정할 수 없어요.</Text><Button accessibilityRole="button" text="돌아가기" onPress={back} />
   </View>;
-  return <TrainerMatching key={`${roomId}-${requestId}`} initialAnswers={request?.answers ?? {}} onCancel={back}
+  return <TrainerMatching key={`${roomId}-${requestId}`} initialAnswers={request?.answers ?? room.initialAnswers ?? {}} onCancel={back}
     onComplete={(answers, details) => {
       if (submitRequest(roomId, details, requestId)) router.dismissTo({ pathname: "/(userTrainerFlow)/trainer-chat/[id]", params: { id: roomId } });
     }} />;

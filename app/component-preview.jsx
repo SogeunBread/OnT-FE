@@ -1,3 +1,4 @@
+import HomePreview from "@/features/user-home/HomePreview";
 import UserTrainerPreview from "@/features/user-trainer/UserTrainerPreview";
 import { useState } from "react";
 import ExerciseComponentsPreview from "@/components/preview/ExerciseComponentsPreview";
@@ -90,6 +91,10 @@ export default function ComponentPreview() {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingTop: 16, paddingBottom: 48, gap: 28 }}
       >
+        <Section title="회원 홈 · 17개 디자인">
+          <Link href="/(userTabs)/home" className="text-14 text-primary-main">회원 홈으로</Link>
+          <HomePreview />
+        </Section>
         <Section title="회원 트레이너 탭 · 26개 디자인">
           <Link href="/(userTabs)/trainer" className="text-14 text-primary-main">회원 트레이너 탭으로</Link>
           <UserTrainerPreview />
